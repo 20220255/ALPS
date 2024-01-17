@@ -3,11 +3,9 @@ import Card from "../shared/Card";
 import Button from "../shared/Button";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import LoyaltyAppContext from "../../context/LoyaltyAppContext";
-import { useDispatch, useSelector } from "react-redux";
-import { updateCustomer } from "../../features/customer/custSlice";
 
 function UpdateCustomerPage() {
-  
+  console.log('start ng update  customer')
   const { customerPointsData, updateData } = useContext(LoyaltyAppContext);
   // const { customers } = useSelector((state) => state.cust)
   
@@ -36,14 +34,9 @@ function UpdateCustomerPage() {
   };
 
   useEffect(() => {
-    console.log(2)
-    const id = 2
     const pointsData = customerPointsData.find((item) => item._id === id);
     console.log(pointsData)
-    // const customerData = customers.find((item) => item._id === id);
-    // console.log(customerData)
     setFormValues(pointsData);
-    // setFormValues(customerData);
   }, [customerPointsData, id]);
 
   const handleIncrement = (e) => {

@@ -69,6 +69,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 // Login
 const loginUser = asyncHandler(async (req, res) => {
+  console.log('api login')
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { FaSignInAlt } from "react-icons/fa";
 import Card from "../shared/Card";
 import { login, reset } from "../../features/auth/authSlice";
@@ -7,8 +7,6 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "../shared/Spinner";
 import {toast} from 'react-toastify'
 import { useEffect } from "react";
-import { getAllCustomers } from "../../features/customer/custSlice";
-import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 
 
 function Login() {
