@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require("express");
 const { errorHandler } = require("./middleware/errorMiddleware");
 const dotenv = require("dotenv").config();
@@ -17,13 +18,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/api/users", require("./routes/userRoutes"));
 
 //Serve frontend
-if (process.env.NODE_ENV === 'production') {
-    // set build foldre as static
-    app.use(express.static(path.join(__dirname, '../frontend/build')))
+if (process.env.NODE_ENV === "production") {
+  // set build foldre as static
+  app.use(express.static(path.join(__dirname, "../frontend/build")));
 
-    app.get('*', (req, res) => res.sendFile(__dirname, '../', 'frontend', 'build', 'index.html'))
+  app.get("*", (req, res) =>
+    res.sendFile(__dirname, "../", "frontend", "build", "index.html")
+  );
+} else {
+  // Routes
+  app.use("/api/users", require("./routes/userRoutes"));
 }
-
 
 app.use(errorHandler);
 
