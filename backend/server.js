@@ -20,14 +20,14 @@ app.use(express.urlencoded({ extended: false }));
 //Serve frontend
 if (process.env.NODE_ENV === "production") {
   // set build folder as static
-  app.use(express.static(path.join(__dirname, "../frontend/build")));
+  app.use(express.static(path.join(__dirname, "../frontend/build"), {dotfiles:'allow'}));
 
   app.get("*", (req, res) =>
     res.sendFile(__dirname, "../", "frontend", "build", "index.html")
   );
 } else {
   // Routes
-  app.use("/api/users", require("./routes/userRoutes"));
+  app.use("/api/users", require("./routes/userRoutes"));    
 }
 
 app.use(errorHandler);
