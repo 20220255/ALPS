@@ -14,12 +14,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Routes
-app.use("/api/users", require("./routes/userRoutes"));
+// // Routes
+// app.use("/api/users", require("./routes/userRoutes"));
 
 //Serve frontend
 if (process.env.NODE_ENV === "production") {
-  // set build foldre as static
+  // set build folder as static
   app.use(express.static(path.join(__dirname, "../frontend/build")));
 
   app.get("*", (req, res) =>
