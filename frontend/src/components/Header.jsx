@@ -61,7 +61,7 @@ function Header() {
         </div>
         <div>
           {userToken && userToken.isAdmin === true && (
-            <div style={{ paddingRight: "-5px" }}>
+            <div style={{ paddingRight: "-5px", marginRight: "-300px" }}>
               <h2 onClick={handleClick}>
                 <Link to="/customer">
                   <span>Customer Updates</span>

@@ -231,7 +231,9 @@ input:focus {
 }
 
 .refresh {
-  margin-top: 20px;
+  margin-top: 0px;
+  margin-left: 400px;
+  margin-top: 50px;
 }
 
 .btn-block {
