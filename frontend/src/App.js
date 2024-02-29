@@ -16,47 +16,57 @@ import Login from "./components/pages/Login";
 import Error from "./components/pages/Error";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import ErrorBoundary from "./utils/ErrorBoundary";
+import { PointsProvider } from "./context/Points";
+import Points from "./components/pages/Points";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <LoyaltyAppProvider>
-          <Header />
-          <div className="container">
-            <ErrorBoundary>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/main" element={<ProtectedRoute />}>
-                  <Route exact path="/main" element={<Main />} />
-                </Route>
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/customer" element={<ProtectedRoute />}>
-                  <Route path="/customer" element={<CustomerPage />} />
-                </Route>
+        <PointsProvider>
+          <LoyaltyAppProvider>
+            <Header />
+            <div className="container">
+              <ErrorBoundary>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/main" element={<ProtectedRoute />}>
+                    <Route exact path="/main" element={<Main />} />
+                  </Route>
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/customer" element={<ProtectedRoute />}>
+                    <Route path="/customer" element={<CustomerPage />} />
+                  </Route>
+                  <Route path="/points/:refId" element={<ProtectedRoute />}>
+                    <Route path="/points/:refId" element={<Points />} />
+                  </Route>
 
-                <Route path="/update-customer/:id" element={<ProtectedRoute />}>
                   <Route
                     path="/update-customer/:id"
-                    element={<UpdateCustomerPage />}
-                  ></Route>
-                </Route>
+                    element={<ProtectedRoute />}
+                  >
+                    <Route
+                      path="/update-customer/:id"
+                      element={<UpdateCustomerPage />}
+                    ></Route>
+                  </Route>
 
-                <Route
-                  path="*"
-                  element={
-                    <Error
-                      errMsg={{ statusText: "Page not found", status: "404" }}
-                    />
-                  }
-                />
-              </Routes>
-            </ErrorBoundary>
-            <AboutIconLink />
-          </div>
-        </LoyaltyAppProvider>
+                  <Route
+                    path="*"
+                    element={
+                      <Error
+                        errMsg={{ statusText: "Page not found", status: "404" }}
+                      />
+                    }
+                  />
+                </Routes>
+              </ErrorBoundary>
+              <AboutIconLink />
+            </div>
+          </LoyaltyAppProvider>
+        </PointsProvider>
       </BrowserRouter>
       <ToastContainer />
     </>

@@ -5,7 +5,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 
 function UpdateCustomerPage() {
-  console.log('start ng update  customer')
   const { customerPointsData, updateData } = useContext(LoyaltyAppContext);
   // const { customers } = useSelector((state) => state.cust)
   
@@ -35,7 +34,6 @@ function UpdateCustomerPage() {
 
   useEffect(() => {
     const pointsData = customerPointsData.find((item) => item._id === id);
-    console.log(pointsData)
     setFormValues(pointsData);
   }, [customerPointsData, id]);
 

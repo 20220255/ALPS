@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
+const Points = require("../models/pointsModel");
 const bcrypt = require("bcryptjs");
 const { error, count } = require("console");
 const jwt = require("jsonwebtoken");
@@ -35,10 +36,7 @@ const registerUser = asyncHandler(async (req, res) => {
     };
     const rnd = generateRandomString();
     return rnd + "-" + numDocs;
-    
   };
-
-  
 
   // Create user
   const user = await User.create({
@@ -46,7 +44,7 @@ const registerUser = asyncHandler(async (req, res) => {
     lastName,
     email,
     password: hashedPassword,
-    refId: await generateRefId()
+    refId: await generateRefId(),
   });
 
   if (user) {
@@ -69,7 +67,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 // Login
 const loginUser = asyncHandler(async (req, res) => {
-  console.log('api login')
+  console.log("api login");
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
@@ -105,7 +103,7 @@ const update = asyncHandler(async (req, res) => {
 
 // View All Customer
 const viewAll = asyncHandler(async (req, res) => {
-  console.log('view all')
+  console.log("view all");
   const user = await User.find({}).select(
     "name lastName email lastDateVisited points refId createdAt isAdmin"
   );
@@ -127,6 +125,60 @@ const getCustDetails = asyncHandler(async (req, res) => {
   console.log(id);
   const user = await User.findOne({ _id: id });
   res.status(200).json(user);
+});
+
+// Add Points
+const addCustomerPoints = asyncHandler(async (req, res) => {
+  const { pointsDate, washClaimed, points, userId, refId } = req.body;
+
+  // Create refId
+  // const generateRefId = async () => {
+  //   const numDocs = await User.countDocuments();
+  //   const generateRandomString = function (length = 6) {
+  //     return Math.random().toString(20).substr(2, length).toLocaleUpperCase();
+  //   };
+  //   const rnd = generateRandomString();
+  //   return rnd + "-" + numDocs;
+  // };
+
+  const pointsRef = await Points.create({
+    pointsDate,
+    washClaimed,
+    points,
+    userId,
+    refId, //: await generateRefId(),
+  });
+
+  if (pointsRef) {
+    res.status(201).json({
+      pointsDate: pointsRef.pointsDate,
+      washClaimed: pointsRef.washClaimed,
+      points: pointsRef.points,
+      userId: pointsRef.userId,
+      refId: pointsRef.refId,
+    });
+  } else {
+    res.status(400);
+    throw new error("Invalid points entry");
+  }
+});
+
+// Claim Free Wash
+const claimFreeWash = asyncHandler(async (req, res) => {
+  console.log('claim')
+  const { refId } = req.body;
+  const isClaimed = await Points.findOne({ washClaimed: true, refId });
+  if (isClaimed) {
+    console.log(isClaimed);
+    console.log("Free wash has been claimed.");
+  } else {
+    console.log(isClaimed);
+    console.log("Not yet eligible for free wash");
+  }
+  res.status(201).json({
+    isClaimed: isClaimed,
+    refId: refId,
+  });
 });
 
 const getMe = asyncHandler(async (req, res) => {
@@ -152,4 +204,6 @@ module.exports = {
   update,
   getCustomerDetails,
   getCustDetails,
+  addCustomerPoints,
+  claimFreeWash,
 };

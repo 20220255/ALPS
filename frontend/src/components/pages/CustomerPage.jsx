@@ -1,9 +1,7 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Spinner from "../shared/Spinner";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllCustomers } from "../../features/customer/custSlice";
 import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 
 function CustomerPage() {
@@ -17,7 +15,7 @@ function CustomerPage() {
 
 
 
-  useState(() => {
+  useEffect(() => {
     fetchData();
     // const userToken = JSON.parse(localStorage.getItem("user"));
     // dispatch(getAllCustomers())

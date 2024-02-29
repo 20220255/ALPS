@@ -4,14 +4,13 @@ import PointsCircles from "./PointsCircles";
 import PropTypes from "prop-types";
 import DateFormat from "./shared/DateFormat";
 import JSConfetti from "js-confetti";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import LoyaltyAppContext from "../context/LoyaltyAppContext";
-import { refresh } from "../features/auth/authSlice";
 import Spinner from "./shared/Spinner";
-import { getAllCustomers } from "../features/customer/custSlice";
+import { Link } from "react-router-dom";
 
 function Main({ maxPoints = 6 }) {
-  const { user } = useSelector((state) => {
+  useSelector((state) => {
     return state.auth;
   });
 
@@ -58,6 +57,10 @@ function Main({ maxPoints = 6 }) {
   }, []);
 
   const handlePointsClaimed = (points) => {
+    if (points >= 6) {
+      points = 6;
+    }
+
     for (let index = 1; index <= points; index++) {
       document.querySelector(`#sw00${index}`).style.backgroundColor =
         "lightblue";
@@ -67,7 +70,7 @@ function Main({ maxPoints = 6 }) {
         "lightgray";
     }
 
-    if (points === 6) {
+    if (points >= 6) {
       confettiRef.current = new JSConfetti({ canvas: canvasRef.current });
       confettiRef.current.addConfetti({
         confettiRadius: 5,
@@ -77,6 +80,9 @@ function Main({ maxPoints = 6 }) {
   };
 
   const handleClick = async () => {
+    if (custDetails.points > maxPoints) {
+      custDetails.points = maxPoints;
+    }
     setPointsLeft(maxPoints - custDetails.points);
     handlePointsClaimed(custDetails.points);
     setinitialRender(false);
@@ -96,9 +102,11 @@ function Main({ maxPoints = 6 }) {
         <PointsCircles maxPoints={maxPoints} />
         <DateFormat date={custDetails.lastDateVisited} />
         Your Ref ID is{" "}
-        <span style={{ color: "royalblue" }}>{custDetails.refId}</span>. Please
-        show the Ref ID and a valid ID to the storekeeper when claiming your
-        point.
+        <span style={{ color: "royalblue" }}>
+          <Link to={`/points/${custDetails.refId}`}>{custDetails.refId}</Link>
+        </span>
+        . Please show the Ref ID and a valid ID to the storekeeper when claiming
+        your point.
         <div className="refresh">
           <button className="btn-md-navy" onClick={handleClick}>
             Check
