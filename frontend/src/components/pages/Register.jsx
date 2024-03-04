@@ -78,9 +78,6 @@ function Register() {
       </section>
 
       <Card>
-        {/* <div style={{ textAlign: "left", color: "royalblue" }}>
-        REF ID: {formValues.refId}
-      </div> */}
         <form onSubmit={onSubmit}>
           <h2>Customer Profile</h2>
           <div className="padding-b-12">

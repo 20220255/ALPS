@@ -7,7 +7,7 @@ import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 function UpdateCustomerPage() {
   const { customerPointsData, updateData } = useContext(LoyaltyAppContext);
   // const { customers } = useSelector((state) => state.cust)
-  
+
   const navigate = useNavigate();
   // const dispatch = useDispatch();
 
@@ -37,29 +37,28 @@ function UpdateCustomerPage() {
     setFormValues(pointsData);
   }, [customerPointsData, id]);
 
-  const handleIncrement = (e) => {
-    e.preventDefault();
-    e.target.id = "points";
-    setFormValues({ ...formValues, [e.target.id]: formValues.points - 1 });
-  };
+  // const handleIncrement = (e) => {
+  //   e.preventDefault();
+  //   e.target.id = "points";
+  //   setFormValues({ ...formValues, [e.target.id]: formValues.points - 1 });
+  // };
 
-  const handleDecrement = (e) => {
-    e.preventDefault();
-    e.target.id = "points";
-    setFormValues({ ...formValues, [e.target.id]: formValues.points + 1 });
-  };
+  // const handleDecrement = (e) => {
+  //   e.preventDefault();
+  //   e.target.id = "points";
+  //   setFormValues({ ...formValues, [e.target.id]: formValues.points + 1 });
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // dispatch(updateCustomer(formValues))
-    updateData(formValues)
+    updateData(formValues);
     navigate("/customer");
   };
 
   return (
     <Card>
       <div style={{ textAlign: "left", color: "royalblue" }}>
-        REF ID: {formValues.refId}
       </div>
       <form onSubmit={handleSubmit}>
         <h2>Customer Data Maintenance</h2>
@@ -101,6 +100,7 @@ function UpdateCustomerPage() {
                 value={formValues.email}
                 id="email"
                 autoComplete="true"
+                style={{width: '500px'}}
               />
             </div>
           </div>
@@ -108,7 +108,7 @@ function UpdateCustomerPage() {
         <div className="padding-b-12">
           <div className="input-group">
             <div>
-              <label htmlFor="points">Points: </label>
+              <label htmlFor="points">Total Points: </label>
               <input
                 type="text"
                 onChange={handleChange}
@@ -116,7 +116,7 @@ function UpdateCustomerPage() {
                 id="points"
                 disabled={true}
               />
-              <button
+              {/* <button
                 className="btn-sm btn-primary margin-r-10"
                 onClick={handleIncrement}
               >
@@ -124,7 +124,7 @@ function UpdateCustomerPage() {
               </button>
               <button className="btn-sm btn-primary" onClick={handleDecrement}>
                 +
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
@@ -163,6 +163,12 @@ function UpdateCustomerPage() {
             </div>
           </div>
         </div>
+        <Link to={`/refId/${formValues._id}`}>
+          <Button marginRight={5}>Points</Button>
+        </Link>
+        <Link to={`/points-maintenance/${formValues.refId}`}>
+          <Button marginRight={5}>Add Points</Button>
+        </Link>
         <Link to={"/customer"}>
           <Button marginRight={5}>Cancel</Button>
         </Link>

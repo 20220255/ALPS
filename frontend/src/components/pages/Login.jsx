@@ -53,13 +53,8 @@ function Login() {
         password
     }
     
-    // dispatch(getAllCustomers())
-
     dispatch(login(userData))
     
-    
-    // fetchData()
-
   };
 
 

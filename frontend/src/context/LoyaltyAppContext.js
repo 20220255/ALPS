@@ -14,8 +14,7 @@ export const LoyaltyAppProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errMsg, setErrMsg] = useState({ text: "", status: "" });
 
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   const { user } = useSelector((state) => {
     return state.auth;
@@ -42,31 +41,33 @@ export const LoyaltyAppProvider = ({ children }) => {
 
       setErrMsg("");
     } catch (error) {
-      
-      console.log(error)
-      toast.error(error.response.data.message)
+      toast.error(error.response.data.message);
+
       setIsLoading(false);
-      navigate('/main')
+
+      navigate("/main");
     }
   };
 
   // Get a customer's data
   // no need to pass an argument here since you can get the user's id from useSeletor hook of redux
   const getCustDetails = async (id) => {
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
+      const response = await axios.get(API_URL + `/customer-details/${id}`);
+      const data = await response.data;
+      setCustDetails(data);
+      setIsLoading(false);
+      // return data
+    } catch (error) {
+      toast.error(error.response.data.message);
+      console.log(error)
+      setIsLoading(false);
 
-    const response = await axios.get(API_URL + `/customer-details/${id}`);
-
-    const data = await response.data;
-
-    setCustDetails(data);
-
-    setIsLoading(false);
+      navigate("/main");
+    }
   };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
 
   // update customer data
   const updateData = async (updatedData) => {
@@ -82,7 +83,6 @@ export const LoyaltyAppProvider = ({ children }) => {
       toast.success("Data updated successfully.");
     } catch (error) {
       toast.error("Error on updating data!");
-
       setIsLoading(false);
     }
   };

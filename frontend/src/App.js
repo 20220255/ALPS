@@ -16,8 +16,10 @@ import Login from "./components/pages/Login";
 import Error from "./components/pages/Error";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import ErrorBoundary from "./utils/ErrorBoundary";
-import { PointsProvider } from "./context/Points";
-import Points from "./components/pages/Points";
+import { PointsProvider } from "./context/PointsContext";
+import PointsCustomer from "./components/pages/PointsCustomer";
+import AddPoints from "./components/pages/AddPoints";
+import PointsRefCustomer from "./components/pages/PointsRefCustomer";
 
 function App() {
   return (
@@ -40,7 +42,13 @@ function App() {
                     <Route path="/customer" element={<CustomerPage />} />
                   </Route>
                   <Route path="/points/:refId" element={<ProtectedRoute />}>
-                    <Route path="/points/:refId" element={<Points />} />
+                    <Route path="/points/:refId" element={<PointsCustomer />} />
+                  </Route>
+                  <Route path="/points-maintenance/:refId" element={<ProtectedRoute />}>
+                    <Route path="/points-maintenance/:refId" element={<AddPoints />} />
+                  </Route>
+                  <Route path="/refId/:userId" element={<ProtectedRoute />}>
+                    <Route path="/refId/:userId" element={<PointsRefCustomer />} />
                   </Route>
 
                   <Route

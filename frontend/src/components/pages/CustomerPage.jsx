@@ -13,8 +13,6 @@ function CustomerPage() {
   const { fetchData, customerPointsData, isLoading } =
     useContext(LoyaltyAppContext);
 
-
-
   useEffect(() => {
     fetchData();
     // const userToken = JSON.parse(localStorage.getItem("user"));
@@ -29,18 +27,20 @@ function CustomerPage() {
       </>
     );
   }
+  
   return isLoading ? (
     <Spinner />
   ) : (
     <div>
       <form style={{ paddingBottom: "30px" }}>
-        <div>
+        <div >
           <input
             id="search"
             className="input-group input-large"
             type="text"
             placeholder="Search customer by name, id or refId"
             onChange={(e) => setSearch(e.target.value)}
+            style={{width: '100%'}}
           />
         </div>
       </form>

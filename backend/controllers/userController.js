@@ -44,8 +44,15 @@ const registerUser = asyncHandler(async (req, res) => {
     lastName,
     email,
     password: hashedPassword,
-    refId: await generateRefId(),
+    // refId: await generateRefId(),
   });
+
+  // Create Ref ID record
+  const pointsRefId = await Points.create({
+    refId: await generateRefId(),
+    userId: user._id
+  })
+
 
   if (user) {
     res.status(201).json({
@@ -54,11 +61,15 @@ const registerUser = asyncHandler(async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       points: user.points,
-      refId: user.refId,
+      refId: pointsRefId.refId,
       lastDateVisited: user.lastDateVisited,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
     });
+
+
+
+
   } else {
     res.status(400);
     throw new error("Invalid user data");
@@ -103,7 +114,6 @@ const update = asyncHandler(async (req, res) => {
 
 // View All Customer
 const viewAll = asyncHandler(async (req, res) => {
-  console.log("view all");
   const user = await User.find({}).select(
     "name lastName email lastDateVisited points refId createdAt isAdmin"
   );
@@ -113,16 +123,22 @@ const viewAll = asyncHandler(async (req, res) => {
 
 // Get customer details
 const getCustomerDetails = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const user = await User.findOne({ _id: id }).select(
-    "name lastName email lastDateVisited points refId isAdmin"
-  );
-  res.status(200).json(user);
+  try {
+    console.log(req.params.id + " 115");
+    const { id } = req.params;
+    const user = await User.findOne({ _id: id }).select(
+      "name lastName email lastDateVisited points refId isAdmin"
+    );
+    console.log(user + " 125");
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400)
+    throw new Error(error)
+  }
 });
 
 const getCustDetails = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   const user = await User.findOne({ _id: id });
   res.status(200).json(user);
 });
@@ -165,16 +181,8 @@ const addCustomerPoints = asyncHandler(async (req, res) => {
 
 // Claim Free Wash
 const claimFreeWash = asyncHandler(async (req, res) => {
-  console.log('claim')
   const { refId } = req.body;
   const isClaimed = await Points.findOne({ washClaimed: true, refId });
-  if (isClaimed) {
-    console.log(isClaimed);
-    console.log("Free wash has been claimed.");
-  } else {
-    console.log(isClaimed);
-    console.log("Not yet eligible for free wash");
-  }
   res.status(201).json({
     isClaimed: isClaimed,
     refId: refId,

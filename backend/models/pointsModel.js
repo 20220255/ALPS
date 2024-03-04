@@ -7,15 +7,14 @@ const pointsSchema = mongoose.Schema(
             require: true
         },
         pointsDate: {
-            type: String
+            type: String,
         },
-        washClaimed: {
+        claimed: {
             type: Boolean,
             default: false
         },
         points: {
             type: Number,
-            require: true,
             default: 0
         },
         comments: {
