@@ -17,7 +17,7 @@ function UpdateCustomerPage() {
     lastName: "",
     email: "",
     points: 0,
-    lastDateVisited: "" || null,
+    lastDateVisited: "",
     refId: "",
     createdAt: "",
   });
@@ -165,9 +165,6 @@ function UpdateCustomerPage() {
         </div>
         <Link to={`/refId/${formValues._id}`}>
           <Button marginRight={5}>Points</Button>
-        </Link>
-        <Link to={`/points-maintenance/${formValues.refId}`}>
-          <Button marginRight={5}>Add Points</Button>
         </Link>
         <Link to={"/customer"}>
           <Button marginRight={5}>Cancel</Button>

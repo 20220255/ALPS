@@ -114,7 +114,7 @@ function Main({ maxPoints = 6 }) {
         <canvas className="canvas" {...{ ...canvasRef }} />
         {initialRender
           ? checkPointsText
-          : pointsLeft === 0
+          : pointsLeft <= 0
           ? completedText
           : uncompletedText}
         <PointsCircles maxPoints={maxPoints} />

@@ -20,6 +20,7 @@ import { PointsProvider } from "./context/PointsContext";
 import PointsCustomer from "./components/pages/PointsCustomer";
 import AddPoints from "./components/pages/AddPoints";
 import PointsRefCustomer from "./components/pages/PointsRefCustomer";
+import EditPointsPage from "./components/pages/EditPointsPage";
 
 function App() {
   return (
@@ -58,6 +59,15 @@ function App() {
                     <Route
                       path="/update-customer/:id"
                       element={<UpdateCustomerPage />}
+                    ></Route>
+                  </Route>
+                  <Route
+                    path="/edit-points/:_id"
+                    element={<ProtectedRoute />}
+                  >
+                    <Route
+                      path="/edit-points/:_id"
+                      element={<EditPointsPage />}
                     ></Route>
                   </Route>
 

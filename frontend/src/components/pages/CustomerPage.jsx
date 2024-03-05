@@ -62,11 +62,11 @@ function CustomerPage() {
                 : item.name
                     .toLowerCase()
                     .includes(search.toLocaleLowerCase()) ||
-                    item.refId.toString().includes(search.toString());
+                    item.refId?.toString().includes(search?.toString());
             })
-            .map((item) => {
+            .map((item, index) => {
               return (
-                <tr key={item._id}>
+                <tr key={index}>
                   <td>{item.name}</td>
                   <td>{item.lastName}</td>
                   <td>{item.email}</td>

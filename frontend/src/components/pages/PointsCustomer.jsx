@@ -1,8 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PointsContext from "../../context/PointsContext";
 import Spinner from "../shared/Spinner";
 import { Link, useParams } from "react-router-dom";
 import Button from "../shared/Button";
+import { FaEdit } from "react-icons/fa";
 
 function PointsCustomer() {
   const {
@@ -18,9 +19,23 @@ function PointsCustomer() {
 
   const userToken = JSON.parse(localStorage.getItem("user"));
 
+  const [formValues, setFormValues] = useState({
+    _id: "",
+    refId: "",
+    pointsDate: "",
+    claimed: "",
+    points: 0,
+    comments: "",
+    userId: "",
+  });
+
   useEffect(() => {
     getPtsListByRef(refId);
-  }, [getPtsListByRef, refId]);
+
+    const refPointsData = refPoints.find((item) => item._id === refId);
+    setFormValues(refPointsData);
+
+  }, [getPtsListByRef, refId, refPoints]);
 
   if (!loading && (!refPoints || refPoints.length === 0)) {
     return (
@@ -30,7 +45,7 @@ function PointsCustomer() {
     );
   }
 
-  if (refPoints.length === 1 && refPoints[0].pointsDate === "") {
+  if (refPoints.length < 1 && refPoints[0].pointsDate === "") {
     return loading ? (
       <Spinner />
     ) : (
@@ -62,15 +77,13 @@ function PointsCustomer() {
         {userToken && userToken.isAdmin === true && (
           <div className="ptsRefId" style={{ float: "right" }}>
             <Link to={`/points-maintenance/${refId}`}>
-              <button className="btn-md">
-                Add Points
-              </button>
+              <button className="btn-md">Add Points</button>
             </Link>
           </div>
         )}
       </div>
 
-      {refPoints.length === 1 && refPoints[0].pointsDate === "" ? (
+      {refPoints.length < 1 && refPoints[0].pointsDate === "" ? (
         <table>
           <tbody>
             <tr>
@@ -97,6 +110,13 @@ function PointsCustomer() {
                   <td>{refPoint.pointsDate}</td>
                   <td>{refPoint.points}</td>
                   <td>{refPoint.comments}</td>
+                  <td>
+                    <div className="edit-link">
+                      <Link to={`/edit-points/${refPoint._id}`}>
+                        <FaEdit size={18} />
+                      </Link>
+                    </div>
+                  </td>
                 </tr>
               );
             })}

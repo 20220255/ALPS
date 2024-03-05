@@ -124,12 +124,10 @@ const viewAll = asyncHandler(async (req, res) => {
 // Get customer details
 const getCustomerDetails = asyncHandler(async (req, res) => {
   try {
-    console.log(req.params.id + " 115");
     const { id } = req.params;
     const user = await User.findOne({ _id: id }).select(
       "name lastName email lastDateVisited points refId isAdmin"
     );
-    console.log(user + " 125");
     res.status(200).json(user);
   } catch (error) {
     res.status(400)

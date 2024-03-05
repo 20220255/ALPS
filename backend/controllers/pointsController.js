@@ -22,15 +22,7 @@ const getPtsListByRef = asyncHandler(async (req, res) => {
 
 // Add points by ref id
 const addPoints = asyncHandler(async (req, res) => {
-  
   const { refId, pointsDate, claimed, points, userId, comments } = req.body;
-
-  console.log(refId + " refId")
-  console.log(pointsDate + " pointsDate")
-  console.log(userId + " user ID")
-  console.log(claimed + " claimed")
-  console.log(points + " points")
-  console.log(comments + " comments")
 
   if (!refId || !pointsDate || !userId || !comments) {
     res.status(400);
@@ -65,7 +57,7 @@ const addPoints = asyncHandler(async (req, res) => {
 const getRefIds = asyncHandler(async (req, res) => {
   try {
     const { userId } = req.params;
-    const refIdRecords = await Points.find({userId});
+    const refIdRecords = await Points.find({ userId });
     if (refIdRecords.length != 0) {
       res.status(200).json(refIdRecords);
     } else {
@@ -78,8 +70,54 @@ const getRefIds = asyncHandler(async (req, res) => {
   }
 });
 
+// Get the individual points from Points table
+const getPoints = asyncHandler(async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const pointsData = await Points.findOne({ _id });
+    if (pointsData.length != 0) {
+      res.status(200).json(pointsData);
+    } else {
+      res.status(400);
+      throw new Error("Points ID is invalid");
+    }
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  }
+});
+
+// Update Points
+const updatePoints = asyncHandler(async (req, res) => {
+  try {
+    const { _id, pointsDate, points, claimed, comments } = req.body;
+    const user = await Points.findOneAndUpdate(
+      { _id },
+      { pointsDate, points, claimed, comments },
+      { new: true }
+    );
+    res.status(200).json(user);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+// Delete Points
+const deletePoints = asyncHandler(async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const resp = await Points.findByIdAndDelete(_id);
+    res.status(200).json(resp)
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 module.exports = {
   getPtsListByRef,
   addPoints,
   getRefIds,
+  getPoints,
+  updatePoints,
+  deletePoints,
 };

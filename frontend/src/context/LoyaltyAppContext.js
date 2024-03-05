@@ -61,7 +61,6 @@ export const LoyaltyAppProvider = ({ children }) => {
       // return data
     } catch (error) {
       toast.error(error.response.data.message);
-      console.log(error)
       setIsLoading(false);
 
       navigate("/main");

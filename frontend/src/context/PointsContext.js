@@ -13,6 +13,7 @@ export const PointsProvider = ({ children }) => {
   const [latestRefIdObj, setLatestRefIdObj] = useState({});
   const [latestRefIdObjs, setLatestRefIdObjs] = useState({});
   const [totalPoints, setTotalPoints] = useState();
+  const [pointsData, setPointsData] = useState({})
 
   const [refList, setRefList] = useState([]);
   const navigate = useNavigate();
@@ -51,6 +52,25 @@ export const PointsProvider = ({ children }) => {
       navigate("/main");
     }
   };
+
+  // update points data
+  const updatePoints = async (updatedPoints) => {
+    setLoading(true);
+    
+    try {
+      await axios.put(API_URL + "update-points", updatedPoints);
+
+      setPointsData({ ...refPoints, ...updatedPoints });
+
+      setLoading(false);
+
+      toast.success("Data updated successfully.");
+    } catch (error) {
+      toast.error("Error on updating data!");
+      setLoading(false);
+    }
+  };
+
 
   // check free wash was claimed by reference id
   const isFreeWashClaimed = () => {
@@ -124,6 +144,23 @@ export const PointsProvider = ({ children }) => {
     return userRefData.reduce((a, b) => (a.createdAt > b.createdAt ? a : b));
   };
 
+  // Get Points object from Points table
+  const getPoints = async (_id) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(API_URL + "point/" + _id, {
+        headers: { Authorization: `Bearer ${userLocal.token}` },
+      });
+      const data = await response.data
+      setPointsData(data)
+      return await data
+    } catch (error) {
+      toast.error(error.response.data.message);
+      setLoading(false);
+      navigate("/main");
+    }
+  };
+
   return (
     <PointsContext.Provider
       value={{
@@ -132,6 +169,8 @@ export const PointsProvider = ({ children }) => {
         addPoints,
         getRefListByUserId,
         getLatestRefId,
+        getPoints,
+        updatePoints,
         refPoints,
         loading,
         userRefData,
@@ -140,6 +179,7 @@ export const PointsProvider = ({ children }) => {
         latestRefIdObj,
         latestRefIdObjs,
         totalPoints,
+        pointsData
       }}
     >
       {children}
