@@ -13,7 +13,7 @@ export const PointsProvider = ({ children }) => {
   const [latestRefIdObj, setLatestRefIdObj] = useState({});
   const [latestRefIdObjs, setLatestRefIdObjs] = useState({});
   const [totalPoints, setTotalPoints] = useState();
-  const [pointsData, setPointsData] = useState({})
+  const [pointsData, setPointsData] = useState({});
 
   const [refList, setRefList] = useState([]);
   const navigate = useNavigate();
@@ -56,9 +56,11 @@ export const PointsProvider = ({ children }) => {
   // update points data
   const updatePoints = async (updatedPoints) => {
     setLoading(true);
-    
+
     try {
-      await axios.put(API_URL + "update-points", updatedPoints);
+      await axios.put(API_URL + "update-points", updatedPoints, {
+        headers: { Authorization: `Bearer ${userLocal.token}` },
+      });
 
       setPointsData({ ...refPoints, ...updatedPoints });
 
@@ -71,6 +73,24 @@ export const PointsProvider = ({ children }) => {
     }
   };
 
+  const deletePoints = async (_id) => {
+    setLoading(true);
+
+    try {
+      await axios.delete(API_URL + "delete-points/" + _id, {
+        headers: { Authorization: `Bearer ${userLocal.token}` },
+      });
+
+      // setPointsData({ ...refPoints, ...updatedPoints });
+
+      setLoading(false);
+
+      toast.success("Points deleted successfully.");
+    } catch (error) {
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
 
   // check free wash was claimed by reference id
   const isFreeWashClaimed = () => {
@@ -151,9 +171,9 @@ export const PointsProvider = ({ children }) => {
       const response = await axios.get(API_URL + "point/" + _id, {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
-      const data = await response.data
-      setPointsData(data)
-      return await data
+      const data = await response.data;
+      setPointsData(data);
+      return await data;
     } catch (error) {
       toast.error(error.response.data.message);
       setLoading(false);
@@ -171,6 +191,7 @@ export const PointsProvider = ({ children }) => {
         getLatestRefId,
         getPoints,
         updatePoints,
+        deletePoints,
         refPoints,
         loading,
         userRefData,
@@ -179,7 +200,7 @@ export const PointsProvider = ({ children }) => {
         latestRefIdObj,
         latestRefIdObjs,
         totalPoints,
-        pointsData
+        pointsData,
       }}
     >
       {children}

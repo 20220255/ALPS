@@ -5,7 +5,7 @@ import PointsContext from "../../context/PointsContext";
 import Button from "../shared/Button";
 
 function EditPointsPage() {
-  const { getPoints, updatePoints, refPoints = {} } = useContext(PointsContext);
+  const { updatePoints, refPoints, deletePoints = {} } = useContext(PointsContext);
   
   const { _id } = useParams();
 
@@ -66,11 +66,12 @@ function EditPointsPage() {
     setFormValues({ ...formValues, [e.target.id]: formValues.points + 1 });
   };
 
-  const handleDelete = (_id) => {
+  const handleDelete = () => {
     const isConfirmed = window.confirm("Are you sure you want to delete the point?")
     if (isConfirmed) {
-        console.log("Delete")
+        deletePoints(formValues._id)
     }
+    navigate(`/points/${formValues.refId}`)
   }
 
   return (
@@ -88,7 +89,6 @@ function EditPointsPage() {
                 <input
                   type="date"
                   onChange={handleChange}
-                  // value={formValues.pointsDate}
                   value={pointsDate}
                   id="pointsDate"
                   autoComplete="true"
