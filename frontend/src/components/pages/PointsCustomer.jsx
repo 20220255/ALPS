@@ -6,6 +6,9 @@ import Button from "../shared/Button";
 import { FaEdit } from "react-icons/fa";
 
 function PointsCustomer() {
+  
+  const { refId } = useParams();
+  
   const {
     refPoints,
     getPtsListByRef,
@@ -14,9 +17,10 @@ function PointsCustomer() {
     isFreeWashClaimed,
     // totalPoints,
     getPointsByRefId,
+    refIdContext = refId
   } = useContext(PointsContext);
 
-  const { refId } = useParams();
+  
 
   const userToken = JSON.parse(localStorage.getItem("user"));
 
@@ -33,6 +37,7 @@ function PointsCustomer() {
   const [pointsArray, setPointsArray] = useState([{}]);
   const [refIdObj, setRefIdObj] = useState();
   const [totalPoints, setTotalPoints] = useState();
+  // const [refIdContext, setRefIdContext] = useState(refId)
 
   useEffect(() => {
     getLatestPtsFromRefId();
@@ -133,7 +138,7 @@ function PointsCustomer() {
                   <td>{points.comments}</td>
                   <td>
                     <div className="edit-link">
-                      <Link to={`/edit-points/${points._id}`}>
+                      <Link to={`/edit-points/${points._id}/${refId}`}>
                         <FaEdit size={18} />
                       </Link>
                     </div>

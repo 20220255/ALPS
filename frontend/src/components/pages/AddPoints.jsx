@@ -17,7 +17,7 @@ function AddPoints() {
     comments: "",
   });
 
-  const { pointsDate, points, claimed, comments } = formValues;
+  const { pointsDate, points, comments } = formValues;
 
   const { refId } = useParams();
 

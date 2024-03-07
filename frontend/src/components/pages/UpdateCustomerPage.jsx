@@ -19,7 +19,7 @@ function UpdateCustomerPage() {
     points: 0,
     lastDateVisited: "",
     refId: "",
-    createdAt: "",
+      
   });
 
   const { id } = useParams();

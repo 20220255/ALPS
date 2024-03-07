@@ -5,38 +5,42 @@ import PointsContext from "../../context/PointsContext";
 import Button from "../shared/Button";
 
 function EditPointsPage() {
-  const { updatePoints, refPoints, deletePoints = {} } = useContext(PointsContext);
+  const { updatePoints, refPoints, deletePoints = {}, getPoints } = useContext(PointsContext);
   
-  const { _id } = useParams();
+  const { _id, refId } = useParams();
 
   // const [formValues, setFormValues] = useState({ pointsData  });
   const [formValues, setFormValues] = useState({
+
     _id,
-    refId: "",
+    // refId: "",
     pointsDate: "",
     points: 0,
-    userId: "",
-    claimed: false,
+    // userId: "",
+    // claimed: false,
     comments: "",
     createdAt: "",
   });
 
   
-  
-  const { refId, pointsDate, points, claimed, comments } = formValues;
+  const { pointsDate, points, comments } = formValues;
 
   const [isChecked, setIsChecked] = useState(false);
 
   const navigate = useNavigate();
 
 
-  useEffect(() => {
-    // getPoints(_id);
-    const pointsData = refPoints.find((item) => item._id === _id);
-    setFormValues(pointsData);  
-  }, [_id, refPoints]);
-  
+  const getPts = async (_id) => {
+    const ptsObj = await getPoints(_id)
+    setFormValues(ptsObj)
+  }
 
+
+  useEffect(() => {
+    // find the points from the points table using the id parameter
+    getPts(_id)
+  }, [_id]);
+  
   const handleChange = (e) => {
     if (e.target.id === "points") {
       setFormValues({ ...formValues, [e.target.id]: parseInt(e.target.value) });
@@ -51,7 +55,7 @@ function EditPointsPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     updatePoints(formValues)
-    navigate(`/points/${formValues.refId}`)
+    navigate(`/points/${refId}`)
   };
 
   const handleIncrement = (e) => {
@@ -71,15 +75,15 @@ function EditPointsPage() {
     if (isConfirmed) {
         deletePoints(formValues._id)
     }
-    navigate(`/points/${formValues.refId}`)
+    navigate(`/points/${refId}`)
   }
 
   return (
     <div>
       <Card>
-        <div style={{ textAlign: "left", color: "royalblue" }}>
-          REF ID: {refId}
-        </div>
+        {/* <div style={{ textAlign: "left", color: "royalblue" }}>
+          REF ID: 'refId'
+        </div> */}
         <form onSubmit={handleSubmit}>
           <h2>Update Points</h2>
           <div className="padding-b-12">
@@ -97,7 +101,7 @@ function EditPointsPage() {
               </div>
             </div>
           </div>
-          <div className="padding-b-12">
+          {/* <div className="padding-b-12">
             <div className="input-group">
               <div>
                 <label htmlFor="claimed">Wash Claimed: </label>
@@ -111,7 +115,7 @@ function EditPointsPage() {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="padding-b-12">
             <div className="input-group">
               <div>
