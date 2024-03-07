@@ -32,7 +32,7 @@ function EditPointsPage() {
 
   const getPts = async (_id) => {
     const ptsObj = await getPoints(_id)
-    setFormValues(ptsObj)
+    await setFormValues(ptsObj)
   }
 
 

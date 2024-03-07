@@ -208,7 +208,7 @@ export const PointsProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
       const data = await response.data;
-      setPointsData(data);
+      await setPointsData(data);
       return await data;
     } catch (error) {
       toast.error(error.response.data.message);
