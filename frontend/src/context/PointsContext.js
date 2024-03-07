@@ -14,12 +14,32 @@ export const PointsProvider = ({ children }) => {
   const [latestRefIdObjs, setLatestRefIdObjs] = useState({});
   const [totalPoints, setTotalPoints] = useState();
   const [pointsData, setPointsData] = useState({});
+  // const [latestPts, setLatestPts] = useState([{}])
 
   const [refList, setRefList] = useState([]);
   const navigate = useNavigate();
   const API_URL = "/api/points/";
   const userLocal = JSON.parse(localStorage.getItem("user"));
   const [latestRef] = useState({});
+
+
+  // get points obj array from ref id
+  const getPointsByRefId = async (refId) => {
+    try {
+      setLoading(true)
+      const response = await axios.get(API_URL + '/getPointsByRef/' + refId, {
+        headers: { Authorization: `Bearer ${userLocal.token}` },
+      } )
+      const latestPts = await response.data
+      setLoading(false)
+      return latestPts
+    } catch (error) {
+      toast.error(error.response.data.message);
+      setLoading(false);
+      navigate("/main");
+    }
+  }
+
 
   // Get the Points list by reference ID
   const getPtsListByRef = async (refId) => {
@@ -120,11 +140,14 @@ export const PointsProvider = ({ children }) => {
   const getRefListByUserId = async (userId) => {
     try {
       setLoading(true);
+      console.log(userId + ' 123 userId')
       const response = await axios.get(API_URL + "user/" + userId, {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
       const data = await response.data;
       setUserRefData(data);
+
+      console.log(data + ' 129 UserRefData')
 
       // get distinct Ref IDs
       const refList = [...new Set(data.map((item) => item.refId))];
@@ -192,6 +215,7 @@ export const PointsProvider = ({ children }) => {
         getPoints,
         updatePoints,
         deletePoints,
+        getPointsByRefId,
         refPoints,
         loading,
         userRefData,
@@ -201,6 +225,7 @@ export const PointsProvider = ({ children }) => {
         latestRefIdObjs,
         totalPoints,
         pointsData,
+        // latestPts,
       }}
     >
       {children}

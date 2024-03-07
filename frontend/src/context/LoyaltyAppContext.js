@@ -56,6 +56,7 @@ export const LoyaltyAppProvider = ({ children }) => {
       setIsLoading(true);
       const response = await axios.get(API_URL + `/customer-details/${id}`);
       const data = await response.data;
+      // get the customer details
       setCustDetails(data);
       setIsLoading(false);
       // return data

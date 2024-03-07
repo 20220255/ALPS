@@ -41,7 +41,6 @@ function AddPoints() {
       refId,
       points,
       userId: latestRefIdObj.userId,
-      claimed,
       comments,
     };
     addPoints(pointsData);
@@ -82,7 +81,7 @@ function AddPoints() {
               </div>
             </div>
           </div>
-          <div className="padding-b-12">
+          {/* <div className="padding-b-12">
             <div className="input-group">
               <div>
                 <label htmlFor="claimed">Wash Claimed: </label>
@@ -96,7 +95,7 @@ function AddPoints() {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="padding-b-12">
             <div className="input-group">
               <div>

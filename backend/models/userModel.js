@@ -1,6 +1,6 @@
 const { default: mongoose } = require("mongoose");
 
-const userSchema = mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -25,19 +25,11 @@ const userSchema = mongoose.Schema(
       require: true,
       default: false,
     },
-    points: {
+    overallPoints: {
       type: Number,
       default: 0,
-      require: true,
     },
-    lastDateVisited: {
-      type: String,
-      default: 'N.A.'
-    },
-    refId: {
-        type: String,
-        require: false,
-    }
+    refIds: [{ type: mongoose.Schema.Types.ObjectId, ref: "Reference" }],
   },
   {
     timestamps: true,

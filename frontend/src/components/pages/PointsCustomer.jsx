@@ -12,7 +12,8 @@ function PointsCustomer() {
     loading,
     getTotalPointsbyRefId,
     isFreeWashClaimed,
-    totalPoints,
+    // totalPoints,
+    getPointsByRefId,
   } = useContext(PointsContext);
 
   const { refId } = useParams();
@@ -29,15 +30,35 @@ function PointsCustomer() {
     userId: "",
   });
 
+  const [pointsArray, setPointsArray] = useState([{}]);
+  const [refIdObj, setRefIdObj] = useState();
+  const [totalPoints, setTotalPoints] = useState();
+
   useEffect(() => {
-    getPtsListByRef(refId);
+    getLatestPtsFromRefId();
+    getRefId(userToken.refId, refId);
+  }, []);
 
-    const refPointsData = refPoints.find((item) => item._id === refId);
-    setFormValues(refPointsData);
+  // get the pts from the latest ref id
+  const getLatestPtsFromRefId = async () => {
+    const pts = await getPointsByRefId(refId);
+    const pointsArray = await pts[0].pointsIds;
+    setPointsArray(pointsArray);
 
-  }, [getPtsListByRef, refId, refPoints]);
+    // get the total points from the points array
+    const totalPoints = await pointsArray
+      .map((obj) => obj.points)
+      .reduce((accumulator, current) => accumulator + current, 0);
+    setTotalPoints(totalPoints);
+  };
 
-  if (!loading && (!refPoints || refPoints.length === 0)) {
+  // get the ref id
+  const getRefId = async (refIds, refId) => {
+    const refIdObj = await refIds.find((r) => r._id === refId);
+    setRefIdObj(refIdObj.refId);
+  };
+
+  if (!loading && (!pointsArray || pointsArray.length === 0)) {
     return (
       <>
         <Spinner />
@@ -45,7 +66,7 @@ function PointsCustomer() {
     );
   }
 
-  if (refPoints.length < 1 && refPoints[0].pointsDate === "") {
+  if (pointsArray.length < 1) {
     return loading ? (
       <Spinner />
     ) : (
@@ -72,11 +93,11 @@ function PointsCustomer() {
     <div>
       <div>
         <div style={{ float: "left" }} className="ptsRefId">
-          Reference ID: {refPoints[0].refId}
+          Reference ID: {refIdObj}
         </div>
         {userToken && userToken.isAdmin === true && (
           <div className="ptsRefId" style={{ float: "right" }}>
-            <Link to={`/points-maintenance/${refId}`}>
+            <Link to={`/points-maintenance/${refIdObj}`}>
               <button className="btn-md">Add Points</button>
             </Link>
           </div>
@@ -104,15 +125,15 @@ function PointsCustomer() {
               <th>Points</th>
               <th>Comments</th>
             </tr>
-            {refPoints.map((refPoint, index) => {
+            {pointsArray.map((points, index) => {
               return (
                 <tr key={index}>
-                  <td>{refPoint.pointsDate}</td>
-                  <td>{refPoint.points}</td>
-                  <td>{refPoint.comments}</td>
+                  <td>{points.pointsDate}</td>
+                  <td>{points.points}</td>
+                  <td>{points.comments}</td>
                   <td>
                     <div className="edit-link">
-                      <Link to={`/edit-points/${refPoint._id}`}>
+                      <Link to={`/edit-points/${points._id}`}>
                         <FaEdit size={18} />
                       </Link>
                     </div>
@@ -132,6 +153,8 @@ function PointsCustomer() {
       </div>
     </div>
   );
+
+  // );
 }
 
 export default PointsCustomer;

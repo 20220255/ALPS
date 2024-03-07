@@ -18,56 +18,68 @@ function Main({ maxPoints = 6 }) {
 
   const userToken = JSON.parse(localStorage.getItem("user"));
 
+  const [userLoggedInData, setUserLoggedInData] = useState(userToken);
+
   const [pointsLeft, setPointsLeft] = useState(0);
   const [initialRender, setinitialRender] = useState(false);
+
+  const [latestRefIdObj, setLatestRefIdObj] = useState({});
+
+  const [totalPoints, setTotalPoints] = useState(0)
 
   const canvasRef = useRef();
   const confettiRef = useRef();
 
-  const { getCustDetails, custDetails, isLoading } =
+  const { custDetails, isLoading } =
     useContext(LoyaltyAppContext);
 
   const {
-    getPtsListByRef,
-    getLatestRefId,
-    getRefListByUserId,
-    latestRefIdObj,
-    totalPoints
+    getPointsByRefId,
   } = useContext(PointsContext);
 
   useEffect(() => {
-    getCustDetails(userToken._id);
-    setinitialRender(true);
     
-    // Get Reference list records by the current user
-    getRefListByUserId(userToken._id);
-
-
+    setUserLoggedInData(userToken)
+    getLatestRefId();
+    setinitialRender(true);
   }, []);
 
-  // Get the latest Ref Id. This will bw shown on the Main page
-  const latestRefId = getLatestRefId();
+  // get the latest ref id from the logged user
+  const getLatestRefId = async () => {
+    // get the latest Ref ID from the use logged in
+    const latestRefIdObj = await userToken.refId.at(-1);
+    setLatestRefIdObj(latestRefIdObj);
+
+    // get the points from the latest ref id
+    const pts = await getPointsByRefId(latestRefIdObj._id);
+    const latestPtsArray = pts[0].pointsIds;
+
+    // get the total points from the latest ref id
+    const totalPoints = await latestPtsArray
+      .map((obj) => obj.points)
+      .reduce((accumulator, current) => accumulator + current, 0);
+    setTotalPoints(totalPoints)  
+  };
 
   const checkPointsText = (
-    <h3>Hi {custDetails.name}, Click Check button to show your points.</h3>
+    <h3>Hi {userLoggedInData.name}, Click Check button to show your points.</h3>
   );
 
   const completedText = (
     <h3>
-      Congratulations, {custDetails.name}! You may claim your free wash on your
+      Congratulations, {userLoggedInData.name}! You may claim your free wash on your
       next visit.
     </h3>
   );
 
   const uncompletedText = (
     <h3>
-      Hi {custDetails.name}. You are <span>{String(pointsLeft)}</span>
+      Hi {userLoggedInData.name}. You are <span>{String(pointsLeft)}</span>
       {pointsLeft < 2 ? <span> point</span> : <span> points</span>} away from
       getting your free wash.
     </h3>
   );
 
-  const claimedText = <h3>Free wash for this Ref ID has been claimed.</h3>;
 
   const handlePointsClaimed = (points) => {
     if (points >= 6) {
@@ -96,13 +108,11 @@ function Main({ maxPoints = 6 }) {
     if (custDetails.points > maxPoints) {
       custDetails.points = maxPoints;
     }
-    
-    await getPtsListByRef(latestRefId.refId)
-    
+
     setPointsLeft(maxPoints - totalPoints);
-    
+
     handlePointsClaimed(totalPoints);
-    
+
     setinitialRender(false);
   };
 
@@ -121,7 +131,9 @@ function Main({ maxPoints = 6 }) {
         <DateFormat date={custDetails.lastDateVisited} />
         Your Ref ID is{" "}
         <span style={{ color: "royalblue" }}>
-          <Link to={`/points/${latestRefId.refId}`}>{latestRefIdObj.refId}</Link>
+          <Link to={`/points/${latestRefIdObj._id}`}>
+            {latestRefIdObj.refId}
+          </Link>
         </span>
         . Please show the Ref ID and a valid ID to the storekeeper when claiming
         your point.

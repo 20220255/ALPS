@@ -1,18 +1,14 @@
-const { default: mongoose, Schema } = require("mongoose");
+const { default: mongoose } = require("mongoose");
 
 const pointsSchema = mongoose.Schema(
     {
-        refId: {
-            type: String,
-            require: true
-        },
         pointsDate: {
             type: String,
         },
-        claimed: {
-            type: Boolean,
-            default: false
-        },
+        // claimed: {
+        //     type: Boolean,
+        //     default: false
+        // },
         points: {
             type: Number,
             default: 0
@@ -20,10 +16,7 @@ const pointsSchema = mongoose.Schema(
         comments: {
             type: String
         },
-        userId: {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        }
+        
     },
     {
         timestamps: true
