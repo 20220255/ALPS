@@ -5,7 +5,9 @@ import PointsContext from "../../context/PointsContext";
 import Button from "../shared/Button";
 
 function AddPoints() {
-  const { addPoints, latestRefIdObj } = useContext(PointsContext);
+  const userToken = JSON.parse(localStorage.getItem("user"));
+
+  const { addPointsByRefId } = useContext(PointsContext);
   const [formValues, setFormValues] = useState({
     refId: "",
     pointsDate: "",
@@ -23,6 +25,8 @@ function AddPoints() {
 
   const navigate = useNavigate();
 
+  const latestRefIdObj = userToken.refId.at(-1);
+
   const handleChange = (e) => {
     if (e.target.id === "points") {
       setFormValues({ ...formValues, [e.target.id]: parseInt(e.target.value) });
@@ -37,13 +41,12 @@ function AddPoints() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const pointsData = {
+      refId: latestRefIdObj._id,
       pointsDate,
-      refId,
       points,
-      userId: latestRefIdObj.userId,
       comments,
     };
-    addPoints(pointsData);
+    addPointsByRefId(pointsData);
   };
 
   const handleIncrement = (e) => {

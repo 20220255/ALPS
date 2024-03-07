@@ -159,7 +159,7 @@ const addPointsByRef = asyncHandler(async (req, res) => {
     
     // populate points ids on the ref id
     const refIdObjAddPts = await Reference.find({_id: refId}).populate("pointsIds")
-
+    console.log(refIdObjAddPts + ' 162')  
     res.status(200).json(refIdObjAddPts);
   } catch (error) {
     res.status(400);
