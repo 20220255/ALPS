@@ -77,14 +77,6 @@ const loginUser = asyncHandler(async (req, res) => {
   //Check user and password match
   if (user && (await bcrypt.compare(password, user.password))) {
     res.status(200).json({
-      // _id: user._id,
-      // name: user.name,
-      // lastName: user.lastName,
-      // email: user.email,
-      // points: user.points,
-      // refId: user.refId,
-      // lastDateVisited: user.lastDateVisited,
-      // isAdmin: user.isAdmin,
       _id: user._id,
       name: user.name,
       lastName: user.lastName,
@@ -97,6 +89,20 @@ const loginUser = asyncHandler(async (req, res) => {
   } else {
     res.status(401);
     throw new Error("Invalid credentials");
+  }
+});
+
+// Get customer's Ref Id details
+const getCustRefDetails = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findOne({ _id: id })
+      .populate("refIds")
+      .select("name lastName email isAdmin overallPoints refIds");
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400);
+    throw new Error("Error getting user's credentials");
   }
 });
 
@@ -211,4 +217,5 @@ module.exports = {
   getCustDetails,
   addCustomerPoints,
   claimFreeWash,
+  getCustRefDetails,
 };

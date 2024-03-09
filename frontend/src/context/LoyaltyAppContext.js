@@ -1,9 +1,8 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import Error from "../components/pages/Error";
 import { useNavigate } from "react-router-dom";
 
 const LoyaltyAppContext = createContext();
@@ -13,7 +12,7 @@ export const LoyaltyAppProvider = ({ children }) => {
   const [customerPointsData, setCustomerPointsData] = useState([{}]);
   const [isLoading, setIsLoading] = useState(false);
   const [errMsg, setErrMsg] = useState({ text: "", status: "" });
-
+  const [custDetailsRef, setCustDetailsRef] = useState([{}])
   const navigate = useNavigate();
 
   const { user } = useSelector((state) => {
@@ -68,6 +67,23 @@ export const LoyaltyAppProvider = ({ children }) => {
     }
   };
 
+  // Get customer's detail including ref id details
+  const getCustDetailsRef = async (id) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(API_URL + `/customer-details-ref/${id}`);
+      const data = await response.data;
+      setIsLoading(false)
+      await setCustDetailsRef(data)
+      // return custDetailsRef
+      
+      
+    } catch (error) {
+      toast.error(error.response.data.message);
+      setIsLoading(false);
+      navigate("/main");
+    }
+  };
 
   // update customer data
   const updateData = async (updatedData) => {
@@ -93,9 +109,11 @@ export const LoyaltyAppProvider = ({ children }) => {
         custDetails,
         customerPointsData,
         isLoading,
+        custDetailsRef,
         updateData,
         getCustDetails,
         fetchData,
+        getCustDetailsRef,
         errMsg,
       }}
     >

@@ -29,7 +29,9 @@ export const PointsProvider = ({ children }) => {
       const response = await axios.get(API_URL + "/getPointsByRef/" + refId, {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
+      console.log(response + " 32 repsonse")
       const latestPts = await response.data;
+      
       setLoading(false);
       return latestPts;
     } catch (error) {
@@ -124,8 +126,9 @@ export const PointsProvider = ({ children }) => {
       const response = await axios.post(API_URL + "addPointsByRef/" + ptsData.refId, ptsData, {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
-      navigate(`/points/${response.data[0]._id}`);
+      navigate(`/points/${response.data[0]._id}/${response.data[0].refId}`);
       setLoading(false);
+      toast.success("Points added successfully.");
     } catch (error) {
       toast.error(error.response.data.message);
       setLoading(false);
@@ -153,14 +156,12 @@ export const PointsProvider = ({ children }) => {
   const getRefListByUserId = async (userId) => {
     try {
       setLoading(true);
-      console.log(userId + " 123 userId");
       const response = await axios.get(API_URL + "user/" + userId, {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
       const data = await response.data;
       setUserRefData(data);
 
-      console.log(data + " 129 UserRefData");
 
       // get distinct Ref IDs
       const refList = [...new Set(data.map((item) => item.refId))];
@@ -191,7 +192,7 @@ export const PointsProvider = ({ children }) => {
     } catch (error) {
       toast.error(error.response.data.message);
       setLoading(false);
-      navigate("/main");
+      // navigate("/main");
     }
   };
 

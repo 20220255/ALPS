@@ -1,23 +1,23 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PointsContext from "../../context/PointsContext";
 import { Link, useParams } from "react-router-dom";
 import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 import Spinner from "../shared/Spinner";
 
 function PointsRefCustomer() {
-  const { userRefData, getRefListByUserId, loading, refList } =
-    useContext(PointsContext);
-  const { getCustDetails, custDetails, isLoading } =
+  useContext(PointsContext);
+  const { isLoading, custDetailsRef, getCustDetailsRef } =
     useContext(LoyaltyAppContext);
   const { userId } = useParams();
-  //   const [refId, setRefId] = useState([]);
 
   useEffect(() => {
-    getCustDetails(userId);
-    getRefListByUserId(userId);
+    const getCustomerDetailsRef = async (userId) => {
+      await getCustDetailsRef(userId);
+    };
+    getCustomerDetailsRef(userId);
   }, []);
 
-  if (!isLoading && (!custDetails || custDetails.length === 0)) {
+  if (!isLoading && (!custDetailsRef || custDetailsRef.length === 0)) {
     return (
       <>
         <Spinner />
@@ -25,33 +25,30 @@ function PointsRefCustomer() {
     );
   }
 
-  if (!loading && (!userRefData || userRefData.length === 0)) {
-    return (
-      <>
-        <Spinner />
-      </>
-    );
-  }
-
-  return isLoading || loading ? (
+  return isLoading ? (
     <Spinner />
   ) : (
     <div>
-      <div className="ptsRefId">Customer Name: {custDetails.name}</div>
+      <div className="ptsRefId">Customer Name: {custDetailsRef.name}</div>
       <table>
         <tbody>
           <tr>
             <th>Reference ID</th>
+            <th>Claimed</th>
+            <th>Claimed Date</th>
           </tr>
-          {refList.map((r, index) => {
-            return (
-              <tr key={index}>
-                <td>
-                  <Link to={`/points/${r}`}>{r}</Link>
-                </td>
-              </tr>
-            );
-          })}
+          {custDetailsRef.refIds &&
+            custDetailsRef.refIds.map((r, index) => {
+              return (
+                <tr key={index}>
+                  <td>
+                    <Link to={`/points/${r._id}/${r.refId}`}>{r.refId}</Link>
+                  </td>
+                  <td>{r.claimed ? "Yes" : "No"}</td>
+                  <td>{r.claimDate}</td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </div>

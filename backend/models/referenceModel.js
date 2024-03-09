@@ -8,6 +8,7 @@ const referenceSchema = new mongoose.Schema(
         },
         claimDate: {
             type: String,
+            default: 'NA'
         },
         claimed: {
             type: Boolean,

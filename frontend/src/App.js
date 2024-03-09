@@ -42,11 +42,11 @@ function App() {
                   <Route path="/customer" element={<ProtectedRoute />}>
                     <Route path="/customer" element={<CustomerPage />} />
                   </Route>
-                  <Route path="/points/:refId" element={<ProtectedRoute />}>
-                    <Route path="/points/:refId" element={<PointsCustomer />} />
+                  <Route path="/points/:refId/:refID" element={<ProtectedRoute />}>
+                    <Route path="/points/:refId/:refID" element={<PointsCustomer />} />
                   </Route>
-                  <Route path="/points-maintenance/:refId" element={<ProtectedRoute />}>
-                    <Route path="/points-maintenance/:refId" element={<AddPoints />} />
+                  <Route path="/points-maintenance/:refID/:refId" element={<ProtectedRoute />}>
+                    <Route path="/points-maintenance/:refID/:refId" element={<AddPoints />} />
                   </Route>
                   <Route path="/refId/:userId" element={<ProtectedRoute />}>
                     <Route path="/refId/:userId" element={<PointsRefCustomer />} />

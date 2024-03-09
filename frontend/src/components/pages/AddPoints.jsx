@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Card from "../shared/Card";
 import PointsContext from "../../context/PointsContext";
@@ -19,13 +19,19 @@ function AddPoints() {
 
   const { pointsDate, points, comments } = formValues;
 
-  const { refId } = useParams();
+  const { refID, refId } = useParams();
 
   const [isChecked, setIsChecked] = useState(false);
 
   const navigate = useNavigate();
 
   const latestRefIdObj = userToken.refId.at(-1);
+
+
+  useEffect(() => {
+    // get the _id from reference table using refId. This will be used for adding points 
+  },[])
+
 
   const handleChange = (e) => {
     if (e.target.id === "points") {
@@ -41,7 +47,8 @@ function AddPoints() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const pointsData = {
-      refId: latestRefIdObj._id,
+      // refId: latestRefIdObj._id,
+      refId: refId,
       pointsDate,
       points,
       comments,
@@ -65,7 +72,7 @@ function AddPoints() {
     <div>
       <Card>
         <div style={{ textAlign: "left", color: "royalblue" }}>
-          REF ID: {refId}
+          REF ID: {refID}
         </div>
         <form onSubmit={handleSubmit}>
           <h2>Add Points</h2>

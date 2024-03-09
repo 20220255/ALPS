@@ -6,9 +6,8 @@ import Button from "../shared/Button";
 import { FaEdit } from "react-icons/fa";
 
 function PointsCustomer() {
-  
-  const { refId } = useParams();
-  
+  const { refId, refID } = useParams();
+
   const {
     refPoints,
     getPtsListByRef,
@@ -17,10 +16,8 @@ function PointsCustomer() {
     isFreeWashClaimed,
     // totalPoints,
     getPointsByRefId,
-    refIdContext = refId
+    refIdContext = refId,
   } = useContext(PointsContext);
-
-  
 
   const userToken = JSON.parse(localStorage.getItem("user"));
 
@@ -41,41 +38,66 @@ function PointsCustomer() {
 
   useEffect(() => {
     getLatestPtsFromRefId();
-    getRefId(userToken.refId, refId);
+    // getRefId(userToken.refId, refId);
   }, []);
 
-  // get the pts from the latest ref id
+  // get the pts from ref id
   const getLatestPtsFromRefId = async () => {
     const pts = await getPointsByRefId(refId);
+    console.log(pts[0].pointsIds.length + " pts 47");
     const pointsArray = await pts[0].pointsIds;
     setPointsArray(pointsArray);
 
     // get the total points from the points array
-    const totalPoints = await pointsArray
-      .map((obj) => obj.points)
-      .reduce((accumulator, current) => accumulator + current, 0);
-    setTotalPoints(totalPoints);
+    if (pointsArray.length > 0) {
+      const totalPoints = await pointsArray
+        .map((obj) => obj.points)
+        .reduce((accumulator, current) => accumulator + current, 0);
+      setTotalPoints(totalPoints);
+    }
   };
 
   // get the ref id
-  const getRefId = async (refIds, refId) => {
-    const refIdObj = await refIds.find((r) => r._id === refId);
-    setRefIdObj(refIdObj.refId);
-  };
+  // const getRefId = async (refIds, refId) => {
+  //   console.log(refIds + " refIds")
+  //   console.log(refIds + " refId")
+  //   const refIdObj = await refIds.find((r) => r._id === refId);
+  //   setRefIdObj(refIdObj.refId);
+  // };
 
-  if (!loading && (!pointsArray || pointsArray.length === 0)) {
-    return (
-      <>
-        <Spinner />
-      </>
-    );
-  }
+  // if (pointsArray.length === 0 || !pointsArray) {
+  //   return (
+  //     <>
+  //       <h1>No Points to show yet!</h1>
+  //     </>
+  //   );
+  // }
+
+  // if (!loading && (!pointsArray || pointsArray.length === 0)) {
+  //   return (
+  //     <>
+  //       <Spinner />
+  //     </>
+  //   );
+  // }
 
   if (pointsArray.length < 1) {
     return loading ? (
       <Spinner />
     ) : (
       <div>
+        <div>
+          <div style={{ float: "left" }} className="ptsRefId">
+            Reference ID: {refID}
+          </div>
+          {userToken && userToken.isAdmin === true && (
+            <div className="ptsRefId" style={{ float: "right" }}>
+              <Link to={`/points-maintenance/${refID}/${refId}`}>
+                <button className="btn-md">Add Points</button>
+              </Link>
+            </div>
+          )}
+        </div>
         <table>
           <tbody>
             <tr>
@@ -98,11 +120,11 @@ function PointsCustomer() {
     <div>
       <div>
         <div style={{ float: "left" }} className="ptsRefId">
-          Reference ID: {refIdObj}
+          Reference ID: {refID}
         </div>
         {userToken && userToken.isAdmin === true && (
           <div className="ptsRefId" style={{ float: "right" }}>
-            <Link to={`/points-maintenance/${refIdObj}`}>
+            <Link to={`/points-maintenance/${refID}/${refId}`}>
               <button className="btn-md">Add Points</button>
             </Link>
           </div>
@@ -117,7 +139,7 @@ function PointsCustomer() {
                 <p style={{ fontSize: "35px" }}>No points to show yet.</p>{" "}
                 <br></br>
                 Visit our shop and avail our laundry services to earn points.
-                Thank you!
+                Thank you! Hello
               </td>
             </tr>
           </tbody>
@@ -130,22 +152,26 @@ function PointsCustomer() {
               <th>Points</th>
               <th>Comments</th>
             </tr>
-            {pointsArray.map((points, index) => {
-              return (
-                <tr key={index}>
-                  <td>{points.pointsDate}</td>
-                  <td>{points.points}</td>
-                  <td>{points.comments}</td>
-                  <td>
-                    <div className="edit-link">
-                      <Link to={`/edit-points/${points._id}/${refId}`}>
-                        <FaEdit size={18} />
-                      </Link>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+            {pointsArray.length > 0 ? (
+              pointsArray.map((points, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{points.pointsDate}</td>
+                    <td>{points.points}</td>
+                    <td>{points.comments}</td>
+                    <td>
+                      <div className="edit-link">
+                        <Link to={`/edit-points/${points._id}/${refId}`}>
+                          <FaEdit size={18} />
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <h1>hello</h1>
+            )}
           </tbody>
         </table>
       )}

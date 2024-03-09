@@ -30,14 +30,13 @@ function EditPointsPage() {
   const navigate = useNavigate();
 
 
-  const getPts = async (_id) => {
-    const ptsObj = await getPoints(_id)
-    await setFormValues(ptsObj)
-  }
-
-
   useEffect(() => {
     // find the points from the points table using the id parameter
+    const getPts = async (_id) => {
+      const ptsObj = await getPoints(_id)
+      await setFormValues(ptsObj)
+    }
+
     getPts(_id)
   }, [_id]);
   
