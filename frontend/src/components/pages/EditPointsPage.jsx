@@ -3,11 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import Card from "../shared/Card";
 import PointsContext from "../../context/PointsContext";
 import Button from "../shared/Button";
+import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 
 function EditPointsPage() {
   const { updatePoints, refPoints, deletePoints = {}, getPoints } = useContext(PointsContext);
   
-  const { _id, refId } = useParams();
+  const { _id, refId, refID } = useParams();
 
   // const [formValues, setFormValues] = useState({ pointsData  });
   const [formValues, setFormValues] = useState({
@@ -22,6 +23,7 @@ function EditPointsPage() {
     createdAt: "",
   });
 
+  const { custDetailsRef, getCustDetailsRef } = useContext(LoyaltyAppContext);
   
   const { pointsDate, points, comments } = formValues;
 
@@ -54,7 +56,7 @@ function EditPointsPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     updatePoints(formValues)
-    navigate(`/points/${refId}/${_id}`)
+    navigate(`/points/${refId}/${refID}`)
   };
 
   const handleIncrement = (e) => {
@@ -74,7 +76,7 @@ function EditPointsPage() {
     if (isConfirmed) {
         deletePoints(formValues._id)
     }
-    navigate(`/points/${refId}/${_id}`)
+    navigate(`/points/${refId}/${refID}`)
   }
 
   return (

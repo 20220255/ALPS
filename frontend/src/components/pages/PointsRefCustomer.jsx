@@ -6,8 +6,10 @@ import Spinner from "../shared/Spinner";
 
 function PointsRefCustomer() {
   useContext(PointsContext);
+
   const { isLoading, custDetailsRef, getCustDetailsRef } =
     useContext(LoyaltyAppContext);
+
   const { userId } = useParams();
 
   useEffect(() => {
@@ -15,7 +17,7 @@ function PointsRefCustomer() {
       await getCustDetailsRef(userId);
     };
     getCustomerDetailsRef(userId);
-  }, []);
+  }, [userId]);
 
   if (!isLoading && (!custDetailsRef || custDetailsRef.length === 0)) {
     return (

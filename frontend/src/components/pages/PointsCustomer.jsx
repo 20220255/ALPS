@@ -2,22 +2,22 @@ import React, { useContext, useEffect, useState } from "react";
 import PointsContext from "../../context/PointsContext";
 import Spinner from "../shared/Spinner";
 import { Link, useParams } from "react-router-dom";
-import Button from "../shared/Button";
 import { FaEdit } from "react-icons/fa";
+import { toast } from "react-toastify";
+import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 
 function PointsCustomer() {
   const { refId, refID } = useParams();
 
   const {
     refPoints,
-    getPtsListByRef,
     loading,
-    getTotalPointsbyRefId,
     isFreeWashClaimed,
-    // totalPoints,
     getPointsByRefId,
-    refIdContext = refId,
+    updateClaim,
   } = useContext(PointsContext);
+
+  const { custDetailsRef } = useContext(LoyaltyAppContext);
 
   const userToken = JSON.parse(localStorage.getItem("user"));
 
@@ -32,19 +32,20 @@ function PointsCustomer() {
   });
 
   const [pointsArray, setPointsArray] = useState([{}]);
-  const [refIdObj, setRefIdObj] = useState();
   const [totalPoints, setTotalPoints] = useState();
-  // const [refIdContext, setRefIdContext] = useState(refId)
+  const [claim, setClaim] = useState();
+  const [washClaimed, setWashClaimed] = useState();
 
   useEffect(() => {
     getLatestPtsFromRefId();
-    // getRefId(userToken.refId, refId);
+    freeWashClaimed();
+    
+    // check if the reference was claimed
   }, []);
 
   // get the pts from ref id
   const getLatestPtsFromRefId = async () => {
     const pts = await getPointsByRefId(refId);
-    console.log(pts[0].pointsIds.length + " pts 47");
     const pointsArray = await pts[0].pointsIds;
     setPointsArray(pointsArray);
 
@@ -57,29 +58,24 @@ function PointsCustomer() {
     }
   };
 
-  // get the ref id
-  // const getRefId = async (refIds, refId) => {
-  //   console.log(refIds + " refIds")
-  //   console.log(refIds + " refId")
-  //   const refIdObj = await refIds.find((r) => r._id === refId);
-  //   setRefIdObj(refIdObj.refId);
-  // };
+  // claim free wash
+  const handleClaim = async (claim) => {
+    // console.log(claim + " 62")
+    // await setWashClaimed(!claim);
+    // console.log(washClaimed + " 64")
+    const claimed = {refId, washClaimed};
+    await updateClaim(claimed);
+    await setWashClaimed(!claim);
+  };
 
-  // if (pointsArray.length === 0 || !pointsArray) {
-  //   return (
-  //     <>
-  //       <h1>No Points to show yet!</h1>
-  //     </>
-  //   );
-  // }
-
-  // if (!loading && (!pointsArray || pointsArray.length === 0)) {
-  //   return (
-  //     <>
-  //       <Spinner />
-  //     </>
-  //   );
-  // }
+  // check if free wash has been claimed
+  const freeWashClaimed = async () => {
+    console.log(refID + ' 73 RefID')
+    const refDetails = await custDetailsRef.refIds.find(
+      (r) => r.refId === refID
+    );
+    setWashClaimed(refDetails.claimed);
+  };
 
   if (pointsArray.length < 1) {
     return loading ? (
@@ -123,10 +119,23 @@ function PointsCustomer() {
           Reference ID: {refID}
         </div>
         {userToken && userToken.isAdmin === true && (
-          <div className="ptsRefId" style={{ float: "right" }}>
-            <Link to={`/points-maintenance/${refID}/${refId}`}>
-              <button className="btn-md">Add Points</button>
-            </Link>
+          <div>
+            <div className="ptsRefId" style={{ float: "right" }}>
+              <Link to={`/points-maintenance/${refID}/${refId}`}>
+                <button className="btn-md">Add Points</button>
+              </Link>
+            </div>
+            {totalPoints >= 6 && (
+              <div className="ptsRefId" style={{ float: "right" }}>
+                <button
+                  onClick={ () => handleClaim(washClaimed)}
+                  className="btn-md"
+                  style={{ marginRight: "5px" }}
+                >
+                  {washClaimed ? "UnClaim" : "Claim"}
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -162,7 +171,7 @@ function PointsCustomer() {
                     <td>
                       {userToken && userToken.isAdmin === true && (
                         <div className="edit-link">
-                          <Link to={`/edit-points/${points._id}/${refId}`}>
+                          <Link to={`/edit-points/${points._id}/${refId}/${refID}`}>
                             <FaEdit size={18} />
                           </Link>
                         </div>
@@ -182,7 +191,9 @@ function PointsCustomer() {
         <div>Total Points: {totalPoints}</div>
       </div>
       <div style={{ display: "flex", marginTop: "10px", fontSize: "18px" }}>
-        Free wash claimed: {isFreeWashClaimed() ? "Yes" : "No"}
+        {/* Free wash claimed: {isFreeWashClaimed() ? "Yes" : "No"} */}
+        Free wash claimed: {washClaimed ? "Yes" : "No"}
+        {/* Free wash claimed: {claim ? "Yes" : "No"} */}
       </div>
     </div>
   );

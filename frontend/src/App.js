@@ -62,11 +62,11 @@ function App() {
                     ></Route>
                   </Route>
                   <Route
-                    exact path="/edit-points/:_id/:refId" 
+                    exact path="/edit-points/:_id/:refId/:refID" 
                     element={<ProtectedRoute />}
                   >
                     <Route
-                      exact path="/edit-points/:_id/:refId" 
+                      exact path="/edit-points/:_id/:refId/:refID" 
                       element={<EditPointsPage />}
                     ></Route>
                   </Route>

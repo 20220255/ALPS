@@ -25,8 +25,38 @@ const createRefId = asyncHandler(async (req, res) => {
   }
 });
 
+// Update Claim
+const updateClaim = asyncHandler(async (req, res) => {
+  try {
+
+    console.log('here - 32')
+    const { refId, washClaimed } = req.body;
+
+    console.log(washClaimed + ' claimed')
+    console.log(refId + ' refId')
+
+
+    const date = new Date();
+
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const currentDate = `${day}-${month}-${year}`;
+
+    const reference = await Reference.findOneAndUpdate(
+      { _id: refId },
+      { claimed: washClaimed, claimDate: currentDate },
+      { new: true }
+    );
+    res.status(200).json(reference);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 // Get reference _id using refID
 
 module.exports = {
   createRefId,
+  updateClaim,
 };
