@@ -131,7 +131,7 @@ function Main({ maxPoints = 6 }) {
         <DateFormat date={custDetails.lastDateVisited} />
         Your Ref ID is{" "}
         <span style={{ color: "royalblue" }}>
-          <Link to={`/points/${latestRefIdObj._id}`}>
+          <Link to={`/points/${latestRefIdObj._id}/${latestRefIdObj.refId}`}>
             {latestRefIdObj.refId}
           </Link>
         </span>

@@ -160,11 +160,13 @@ function PointsCustomer() {
                     <td>{points.points}</td>
                     <td>{points.comments}</td>
                     <td>
-                      <div className="edit-link">
-                        <Link to={`/edit-points/${points._id}/${refId}`}>
-                          <FaEdit size={18} />
-                        </Link>
-                      </div>
+                      {userToken && userToken.isAdmin === true && (
+                        <div className="edit-link">
+                          <Link to={`/edit-points/${points._id}/${refId}`}>
+                            <FaEdit size={18} />
+                          </Link>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 );
