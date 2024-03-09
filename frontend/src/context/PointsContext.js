@@ -99,7 +99,7 @@ export const PointsProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
 
-      setPointsData({ ...refPoints, ...updatedPoints });
+      await setPointsData({ ...refPoints, ...updatedPoints });
 
       setLoading(false);
 

@@ -35,17 +35,20 @@ function PointsCustomer() {
   const [totalPoints, setTotalPoints] = useState();
   const [claim, setClaim] = useState();
   const [washClaimed, setWashClaimed] = useState();
+  const [selectedReferenceDetails, getSelectedReferenceDetails] = useState([{}])
 
   useEffect(() => {
     getLatestPtsFromRefId();
     freeWashClaimed();
-    
-    // check if the reference was claimed
   }, []);
 
   // get the pts from ref id
   const getLatestPtsFromRefId = async () => {
     const pts = await getPointsByRefId(refId);
+
+    const claimed = await pts[0].claimed
+    getSelectedReferenceDetails(claimed)
+
     const pointsArray = await pts[0].pointsIds;
     setPointsArray(pointsArray);
 
@@ -59,22 +62,15 @@ function PointsCustomer() {
   };
 
   // claim free wash
-  const handleClaim = async (claim) => {
-    // console.log(claim + " 62")
-    // await setWashClaimed(!claim);
-    // console.log(washClaimed + " 64")
+  const handleClaim = async (washClaimed) => {
     const claimed = {refId, washClaimed};
     await updateClaim(claimed);
-    await setWashClaimed(!claim);
+    await getSelectedReferenceDetails(!washClaimed);
   };
 
   // check if free wash has been claimed
   const freeWashClaimed = async () => {
-    console.log(refID + ' 73 RefID')
-    const refDetails = await custDetailsRef.refIds.find(
-      (r) => r.refId === refID
-    );
-    setWashClaimed(refDetails.claimed);
+    await setWashClaimed(selectedReferenceDetails)
   };
 
   if (pointsArray.length < 1) {
@@ -128,11 +124,11 @@ function PointsCustomer() {
             {totalPoints >= 6 && (
               <div className="ptsRefId" style={{ float: "right" }}>
                 <button
-                  onClick={ () => handleClaim(washClaimed)}
+                  onClick={ () => handleClaim(selectedReferenceDetails)}
                   className="btn-md"
                   style={{ marginRight: "5px" }}
                 >
-                  {washClaimed ? "UnClaim" : "Claim"}
+                  {selectedReferenceDetails ? "UnClaim" : "Claim"}
                 </button>
               </div>
             )}
@@ -192,7 +188,7 @@ function PointsCustomer() {
       </div>
       <div style={{ display: "flex", marginTop: "10px", fontSize: "18px" }}>
         {/* Free wash claimed: {isFreeWashClaimed() ? "Yes" : "No"} */}
-        Free wash claimed: {washClaimed ? "Yes" : "No"}
+        Free wash claimed: {selectedReferenceDetails ? "Yes" : "No"}
         {/* Free wash claimed: {claim ? "Yes" : "No"} */}
       </div>
     </div>
