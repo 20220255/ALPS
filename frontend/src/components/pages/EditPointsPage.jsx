@@ -54,7 +54,7 @@ function EditPointsPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     updatePoints(formValues)
-    navigate(`/points/${refId}`)
+    navigate(`/points/${refId}/${_id}`)
   };
 
   const handleIncrement = (e) => {
@@ -74,7 +74,7 @@ function EditPointsPage() {
     if (isConfirmed) {
         deletePoints(formValues._id)
     }
-    navigate(`/points/${refId}`)
+    navigate(`/points/${refId}/${_id}`)
   }
 
   return (
