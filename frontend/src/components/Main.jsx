@@ -1,9 +1,7 @@
-/* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Card from "./shared/Card";
 import PointsCircles from "./PointsCircles";
 import PropTypes from "prop-types";
-import DateFormat from "./shared/DateFormat";
 import JSConfetti from "js-confetti";
 import { useSelector } from "react-redux";
 import LoyaltyAppContext from "../context/LoyaltyAppContext";
@@ -25,21 +23,17 @@ function Main({ maxPoints = 6 }) {
 
   const [latestRefIdObj, setLatestRefIdObj] = useState({});
 
-  const [totalPoints, setTotalPoints] = useState(0)
+  const [totalPoints, setTotalPoints] = useState(0);
 
   const canvasRef = useRef();
   const confettiRef = useRef();
 
-  const { custDetails, isLoading } =
-    useContext(LoyaltyAppContext);
+  const { isLoading } = useContext(LoyaltyAppContext);
 
-  const {
-    getPointsByRefId,
-  } = useContext(PointsContext);
+  const { getPointsByRefId } = useContext(PointsContext);
 
   useEffect(() => {
-    
-    setUserLoggedInData(userToken)
+    setUserLoggedInData(userToken);
     getLatestRefId();
     setinitialRender(true);
   }, []);
@@ -58,7 +52,7 @@ function Main({ maxPoints = 6 }) {
     const totalPoints = await latestPtsArray
       .map((obj) => obj.points)
       .reduce((accumulator, current) => accumulator + current, 0);
-    setTotalPoints(totalPoints)  
+    setTotalPoints(totalPoints);
   };
 
   const checkPointsText = (
@@ -67,8 +61,8 @@ function Main({ maxPoints = 6 }) {
 
   const completedText = (
     <h3>
-      Congratulations, {userLoggedInData.name}! You may claim your free wash on your
-      next visit.
+      Congratulations, {userLoggedInData.name}! You may claim your free wash on
+      your next visit.
     </h3>
   );
 
@@ -79,7 +73,6 @@ function Main({ maxPoints = 6 }) {
       getting your free wash.
     </h3>
   );
-
 
   const handlePointsClaimed = (points) => {
     if (points >= 6) {
@@ -105,10 +98,6 @@ function Main({ maxPoints = 6 }) {
   };
 
   const handleClick = async () => {
-    if (custDetails.points > maxPoints) {
-      custDetails.points = maxPoints;
-    }
-
     setPointsLeft(maxPoints - totalPoints);
 
     handlePointsClaimed(totalPoints);
@@ -128,15 +117,17 @@ function Main({ maxPoints = 6 }) {
           ? completedText
           : uncompletedText}
         <PointsCircles maxPoints={maxPoints} />
-        <DateFormat date={custDetails.lastDateVisited} />
-        Your Ref ID is{" "}
-        <span style={{ color: "royalblue" }}>
-          <Link to={`/points/${latestRefIdObj._id}/${latestRefIdObj.refId}`}>
-            {latestRefIdObj.refId}
-          </Link>
-        </span>
-        . Please show the Ref ID and a valid ID to the storekeeper when claiming
-        your point.
+        <div>
+          Your Ref ID is{" "}
+          <span style={{ color: "royalblue" }}>
+            <Link to={`/points/${latestRefIdObj._id}/${latestRefIdObj.refId}`}>
+              {latestRefIdObj.refId}
+            </Link>
+          </span>
+          . Please show the Ref ID and a valid ID to the storekeeper when
+          claiming your point. You may also click or tap the Ref ID to show details of your Points.
+        </div>
+
         <div className="refresh">
           <button className="btn-md-navy" onClick={handleClick}>
             Check

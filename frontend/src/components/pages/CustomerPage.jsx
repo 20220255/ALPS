@@ -5,8 +5,6 @@ import Spinner from "../shared/Spinner";
 import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 
 function CustomerPage() {
-  // const dispatch = useDispatch()
-  // const {customers, isLoading, message} = useSelector((state) => state.cust)
 
   const [search, setSearch] = useState("");
 
@@ -15,12 +13,9 @@ function CustomerPage() {
 
   useEffect(() => {
     fetchData();
-    // const userToken = JSON.parse(localStorage.getItem("user"));
-    // dispatch(getAllCustomers())
   }, []);
 
   if (!isLoading && (!customerPointsData || customerPointsData.length === 0)) {
-  // if (!isLoading && (!customers || customers.length === 0)) {
     return (
       <>
         <Spinner />
@@ -55,7 +50,6 @@ function CustomerPage() {
           </tr>
 
           {customerPointsData
-          //{customers
             .filter((item) => {
               return search.toLowerCase() === ""
                 ? item

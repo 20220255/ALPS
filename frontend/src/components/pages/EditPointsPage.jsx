@@ -6,7 +6,7 @@ import Button from "../shared/Button";
 import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 
 function EditPointsPage() {
-  const { updatePoints, refPoints, deletePoints = {}, getPoints } = useContext(PointsContext);
+  const { updatePoints, deletePoints = {}, getPoints } = useContext(PointsContext);
   
   const { _id, refId, refID } = useParams();
 
@@ -23,8 +23,6 @@ function EditPointsPage() {
     createdAt: "",
   });
 
-  const { custDetailsRef, getCustDetailsRef } = useContext(LoyaltyAppContext);
-  
   const { pointsDate, points, comments } = formValues;
 
   const [isChecked, setIsChecked] = useState(false);
@@ -83,9 +81,6 @@ function EditPointsPage() {
   return (
     <div>
       <Card>
-        {/* <div style={{ textAlign: "left", color: "royalblue" }}>
-          REF ID: 'refId'
-        </div> */}
         <form onSubmit={handleSubmit}>
           <h2>Update Points</h2>
           <div className="padding-b-12">
@@ -103,21 +98,6 @@ function EditPointsPage() {
               </div>
             </div>
           </div>
-          {/* <div className="padding-b-12">
-            <div className="input-group">
-              <div>
-                <label htmlFor="claimed">Wash Claimed: </label>
-                <input
-                  type="checkbox"
-                  onChange={handleChange}
-                  checked={claimed}
-                  value={claimed}
-                  id="claimed"
-                  autoComplete="true"
-                />
-              </div>
-            </div>
-          </div> */}
           <div className="padding-b-12">
             <div className="input-group">
               <div>

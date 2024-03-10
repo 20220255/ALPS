@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema(
     },
     lastName: {
       type: String,
-      // require: [true, "Please add a name"],
     },
     email: {
       type: String,

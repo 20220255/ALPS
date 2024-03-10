@@ -5,10 +5,6 @@ const pointsSchema = mongoose.Schema(
         pointsDate: {
             type: String,
         },
-        // claimed: {
-        //     type: Boolean,
-        //     default: false
-        // },
         points: {
             type: Number,
             default: 0

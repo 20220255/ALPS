@@ -3,9 +3,6 @@ import PointsContext from "../../context/PointsContext";
 import Spinner from "../shared/Spinner";
 import { Link, useParams } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
-import LoyaltyAppContext from "../../context/LoyaltyAppContext";
-import { useDispatch } from "react-redux";
-import { reset } from "../../features/auth/authSlice";
 
 function PointsCustomer() {
   const { refId, refID } = useParams();
@@ -17,8 +14,6 @@ function PointsCustomer() {
 
   const [pointsArray, setPointsArray] = useState([{}]);
   const [totalPoints, setTotalPoints] = useState();
-  const [claim, setClaim] = useState();
-  const [washClaimed, setWashClaimed] = useState();
   const [selectedReferenceDetails, getSelectedReferenceDetails] = useState([
     {},
   ]);
@@ -27,7 +22,7 @@ function PointsCustomer() {
 
   useEffect(() => {
     getLatestPtsFromRefId();
-    freeWashClaimed();
+    // freeWashClaimed();
   }, []);
 
   // get the pts from ref id
@@ -56,9 +51,9 @@ function PointsCustomer() {
   };
 
   // check if free wash has been claimed
-  const freeWashClaimed = async () => {
-    await setWashClaimed(selectedReferenceDetails);
-  };
+  // const freeWashClaimed = async () => {
+  //   await setWashClaimed(selectedReferenceDetails);
+  // };
 
   // add another reference after free wash
   const handleAddRef = async () => {

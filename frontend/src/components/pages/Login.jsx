@@ -24,8 +24,6 @@ function Login() {
     return state.auth
   })
 
-  // const {fetchData} = useContext(LoyaltyAppContext)
-
   useEffect(() => {
     if (isError) {
         toast.error(message)
