@@ -111,16 +111,10 @@ export const PointsProvider = ({ children }) => {
   };
 
   const deletePoints = async (deleteIds) => {
-    setLoading(true);
 
     try {
+      setLoading(true)
       const { pointsId, refId } = deleteIds;
-      // console.log(deleteParams + " 118 deleteParams")
-      
-      
-      console.log(pointsId)
-      console.log(refId)
-
       await axios.delete(API_URL + "delete-points/" + pointsId, {data:{refId}}, {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
