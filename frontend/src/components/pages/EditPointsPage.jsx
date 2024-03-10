@@ -73,8 +73,9 @@ function EditPointsPage() {
 
   const handleDelete = () => {
     const isConfirmed = window.confirm("Are you sure you want to delete the point?")
+    const deleteParams = {pointsId: formValues._id, refId }
     if (isConfirmed) {
-        deletePoints(formValues._id)
+        deletePoints(deleteParams)
     }
     navigate(`/points/${refId}/${refID}`)
   }

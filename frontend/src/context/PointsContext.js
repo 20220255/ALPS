@@ -27,7 +27,7 @@ export const PointsProvider = ({ children }) => {
   const getPointsByRefId = async (refId) => {
     try {
       setLoading(true);
-      const response = await axios.get(API_URL + "/getPointsByRef/" + refId, {
+      const response = await axios.get(API_URL + "getPointsByRef/" + refId, {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
       const latestPts = await response.data;
@@ -44,7 +44,7 @@ export const PointsProvider = ({ children }) => {
   // Get the Points list by reference ID
   const getPtsListByRef = async (refId) => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await axios.get(API_URL + refId, {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
@@ -76,9 +76,9 @@ export const PointsProvider = ({ children }) => {
   // update claim
   const updateClaim = async (claim) => {
     try {
-      claim.washClaimed = !claim.washClaimed
-      console.log(claim.washClaimed + ' 81 claim')
-      console.log(claim.refId + ' 82 refId')
+      claim.washClaimed = !claim.washClaimed;
+      console.log(claim.washClaimed + " 81 claim");
+      console.log(claim.refId + " 82 refId");
       await axios.patch(API_REF_URL + "update-claim", claim, {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
@@ -110,11 +110,18 @@ export const PointsProvider = ({ children }) => {
     }
   };
 
-  const deletePoints = async (_id) => {
+  const deletePoints = async (deleteIds) => {
     setLoading(true);
 
     try {
-      await axios.delete(API_URL + "delete-points/" + _id, {
+      const { pointsId, refId } = deleteIds;
+      // console.log(deleteParams + " 118 deleteParams")
+      
+      
+      console.log(pointsId)
+      console.log(refId)
+
+      await axios.delete(API_URL + "delete-points/" + pointsId, {data:{refId}}, {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
 
@@ -139,7 +146,7 @@ export const PointsProvider = ({ children }) => {
 
   // add points by ref id
   const addPointsByRefId = async (ptsData) => {
-    setLoading(true)
+    setLoading(true);
     try {
       const response = await axios.post(
         API_URL + "addPointsByRef/" + ptsData.refId,
@@ -160,7 +167,7 @@ export const PointsProvider = ({ children }) => {
 
   // Add points to customer
   const addPoints = async (pointsData) => {
-    setLoading(true)
+    setLoading(true);
     try {
       const response = await axios.post(API_URL + "addPoints", pointsData, {
         headers: { Authorization: `Bearer ${userLocal.token}` },
@@ -232,9 +239,8 @@ export const PointsProvider = ({ children }) => {
       });
       const data = await response.data;
       await setPointsData(data);
-      setLoading(false)
+      setLoading(false);
       return await data;
-      
     } catch (error) {
       toast.error(error.response.data.message);
       setLoading(false);

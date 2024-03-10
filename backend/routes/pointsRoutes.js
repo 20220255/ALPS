@@ -20,6 +20,6 @@ router.post("/addPoints", protect, checkAdmin, addPoints);
 router.post("/addPointsByRef/:refId", addPointsByRef);
 router.get("/getPointsByRef/:refId", getPointsByRef);
 router.put("/update-points", protect, checkAdmin, updatePoints)
-router.delete("/delete-points/:_id", protect, checkAdmin, deletePoints)
+router.delete("/delete-points/:pointsId", deletePoints)
 
 module.exports = router;
