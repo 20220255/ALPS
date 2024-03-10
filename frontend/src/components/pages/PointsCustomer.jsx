@@ -3,39 +3,27 @@ import PointsContext from "../../context/PointsContext";
 import Spinner from "../shared/Spinner";
 import { Link, useParams } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
-import { toast } from "react-toastify";
 import LoyaltyAppContext from "../../context/LoyaltyAppContext";
+import { useDispatch } from "react-redux";
+import { reset } from "../../features/auth/authSlice";
 
 function PointsCustomer() {
   const { refId, refID } = useParams();
 
-  const {
-    refPoints,
-    loading,
-    isFreeWashClaimed,
-    getPointsByRefId,
-    updateClaim,
-  } = useContext(PointsContext);
-
-  const { custDetailsRef } = useContext(LoyaltyAppContext);
+  const { refPoints, loading, getPointsByRefId, updateClaim, addReference } =
+    useContext(PointsContext);
 
   const userToken = JSON.parse(localStorage.getItem("user"));
-
-  const [formValues, setFormValues] = useState({
-    _id: "",
-    refId: "",
-    pointsDate: "",
-    claimed: "",
-    points: 0,
-    comments: "",
-    userId: "",
-  });
 
   const [pointsArray, setPointsArray] = useState([{}]);
   const [totalPoints, setTotalPoints] = useState();
   const [claim, setClaim] = useState();
   const [washClaimed, setWashClaimed] = useState();
-  const [selectedReferenceDetails, getSelectedReferenceDetails] = useState([{}])
+  const [selectedReferenceDetails, getSelectedReferenceDetails] = useState([
+    {},
+  ]);
+
+  
 
   useEffect(() => {
     getLatestPtsFromRefId();
@@ -44,14 +32,13 @@ function PointsCustomer() {
 
   // get the pts from ref id
   const getLatestPtsFromRefId = async () => {
+    
     const pts = await getPointsByRefId(refId);
-
-    const claimed = await pts[0].claimed
-    getSelectedReferenceDetails(claimed)
+    const claimed = await pts[0].claimed;
+    getSelectedReferenceDetails(claimed);
 
     const pointsArray = await pts[0].pointsIds;
     setPointsArray(pointsArray);
-
     // get the total points from the points array
     if (pointsArray.length > 0) {
       const totalPoints = await pointsArray
@@ -63,15 +50,22 @@ function PointsCustomer() {
 
   // claim free wash
   const handleClaim = async (washClaimed) => {
-    const claimed = {refId, washClaimed};
+    const claimed = { refId, washClaimed };
     await updateClaim(claimed);
     await getSelectedReferenceDetails(!washClaimed);
   };
 
   // check if free wash has been claimed
   const freeWashClaimed = async () => {
-    await setWashClaimed(selectedReferenceDetails)
+    await setWashClaimed(selectedReferenceDetails);
   };
+
+  // add another reference after free wash
+  const handleAddRef = async () => {
+    await addReference(userToken._id)
+    
+  }
+
 
   if (pointsArray.length < 1) {
     return loading ? (
@@ -114,9 +108,18 @@ function PointsCustomer() {
         <div style={{ float: "left" }} className="ptsRefId">
           Reference ID: {refID}
         </div>
+        {selectedReferenceDetails && totalPoints >= 6 && (
+          <div className="ptsRefId" style={{ float: "right" }}>
+              <button onClick={handleAddRef} className="btn-md">Free Wash Again?</button>
+          </div>
+        )}
+
         {userToken && userToken.isAdmin === true && (
           <div>
-            <div className="ptsRefId" style={{ float: "right" }}>
+            <div
+              className="ptsRefId"
+              style={{ float: "right", marginRight: "5px" }}
+            >
               <Link to={`/points-maintenance/${refID}/${refId}`}>
                 <button className="btn-md">Add Points</button>
               </Link>
@@ -124,7 +127,7 @@ function PointsCustomer() {
             {totalPoints >= 6 && (
               <div className="ptsRefId" style={{ float: "right" }}>
                 <button
-                  onClick={ () => handleClaim(selectedReferenceDetails)}
+                  onClick={() => handleClaim(selectedReferenceDetails)}
                   className="btn-md"
                   style={{ marginRight: "5px" }}
                 >
@@ -167,7 +170,9 @@ function PointsCustomer() {
                     <td>
                       {userToken && userToken.isAdmin === true && (
                         <div className="edit-link">
-                          <Link to={`/edit-points/${points._id}/${refId}/${refID}`}>
+                          <Link
+                            to={`/edit-points/${points._id}/${refId}/${refID}`}
+                          >
                             <FaEdit size={18} />
                           </Link>
                         </div>

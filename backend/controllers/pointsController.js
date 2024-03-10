@@ -116,6 +116,8 @@ const deletePoints = asyncHandler(async (req, res) => {
   try {
     const { pointsId } = req.params;
     const { refId } = req.body
+    console.log(pointsId + " points id")
+    console.log(refId + " refid")
     await Reference.findByIdAndUpdate(refId, {$pull: {pointsIds: pointsId}})
     const resp = await Points.findByIdAndDelete(pointsId);
     res.status(200).json(resp);

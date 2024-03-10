@@ -28,13 +28,11 @@ const createRefId = asyncHandler(async (req, res) => {
 // Update Claim
 const updateClaim = asyncHandler(async (req, res) => {
   try {
-
-    console.log('here - 32')
+    console.log("here - 32");
     const { refId, washClaimed } = req.body;
 
-    console.log(washClaimed + ' claimed')
-    console.log(refId + ' refId')
-
+    console.log(washClaimed + " claimed");
+    console.log(refId + " refId");
 
     const date = new Date();
 
@@ -54,9 +52,28 @@ const updateClaim = asyncHandler(async (req, res) => {
   }
 });
 
-// Get reference _id using refID
+// Add reference to user
+const addReference = asyncHandler(async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Create reference record id
+    const refId = await Reference.create({
+      refId: await generateRefId(),
+    });
+
+    const user = await User.findByIdAndUpdate(userId, {
+      $push: { refIds: refId },
+    });
+
+    const userRef = await User.findById(userId).populate("refIds")
+
+    res.status(200).json(userRef);
+  } catch (error) {}
+});
 
 module.exports = {
   createRefId,
   updateClaim,
+  addReference,
 };

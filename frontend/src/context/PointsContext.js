@@ -23,6 +23,24 @@ export const PointsProvider = ({ children }) => {
   const userLocal = JSON.parse(localStorage.getItem("user"));
   const [latestRef] = useState({});
 
+
+  // add reference to a user - new free wash
+  const addReference = async (userId) => {
+    try {
+      setLoading(true)
+      const response = await axios.patch(API_REF_URL + "add-reference/" + userId, {
+        headers: { Authorization: `Bearer ${userLocal.token}` },
+      })
+      setLoading(false)
+      toast.success(response)
+      navigate("/getReferenceId");
+    } catch (error) {
+      toast.error(error.response.data.message);
+      setLoading(false);
+      navigate("/main");
+    }
+  }
+
   // get points obj array from ref id
   const getPointsByRefId = async (refId) => {
     try {
@@ -33,6 +51,7 @@ export const PointsProvider = ({ children }) => {
       const latestPts = await response.data;
 
       setLoading(false);
+      
       return latestPts;
     } catch (error) {
       toast.error(error.response.data.message);
@@ -77,13 +96,10 @@ export const PointsProvider = ({ children }) => {
   const updateClaim = async (claim) => {
     try {
       claim.washClaimed = !claim.washClaimed;
-      console.log(claim.washClaimed + " 81 claim");
-      console.log(claim.refId + " 82 refId");
       await axios.patch(API_REF_URL + "update-claim", claim, {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
       setLoading(false);
-      toast.success("Free wash has been claimed");
     } catch (error) {
       toast.error("Error on updating claim data!");
       setLoading(false);
@@ -110,14 +126,20 @@ export const PointsProvider = ({ children }) => {
     }
   };
 
-  const deletePoints = async (deleteIds) => {
 
+  // delete points
+  const deletePoints = async (deleteIds) => {
     try {
-      setLoading(true)
+      setLoading(true);
       const { pointsId, refId } = deleteIds;
-      await axios.delete(API_URL + "delete-points/" + pointsId, {data:{refId}}, {
-        headers: { Authorization: `Bearer ${userLocal.token}` },
-      });
+      await axios.delete(
+        API_URL + "delete-points/" + pointsId,
+        {
+          headers: { Authorization: `Bearer ${userLocal.token}` },
+        },
+        { data: { refId },  },
+
+      );
 
       // setPointsData({ ...refPoints, ...updatedPoints });
 
@@ -256,6 +278,7 @@ export const PointsProvider = ({ children }) => {
         getPointsByRefId,
         addPointsByRefId,
         updateClaim,
+        addReference,
         refPoints,
         loading,
         userRefData,

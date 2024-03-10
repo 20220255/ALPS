@@ -71,11 +71,11 @@ function EditPointsPage() {
     setFormValues({ ...formValues, [e.target.id]: formValues.points + 1 });
   };
 
-  const handleDelete = () => {
+  const handleDelete = async() => {
     const isConfirmed = window.confirm("Are you sure you want to delete the point?")
     const deleteParams = {pointsId: formValues._id, refId }
     if (isConfirmed) {
-        deletePoints(deleteParams)
+        await deletePoints(deleteParams)
     }
     navigate(`/points/${refId}/${refID}`)
   }

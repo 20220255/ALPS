@@ -21,6 +21,7 @@ import PointsCustomer from "./components/pages/PointsCustomer";
 import AddPoints from "./components/pages/AddPoints";
 import PointsRefCustomer from "./components/pages/PointsRefCustomer";
 import EditPointsPage from "./components/pages/EditPointsPage";
+import GetReferenceId from "./components/pages/GetReferenceId";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
                     <Route exact path="/main" element={<Main />} />
                   </Route>
                   <Route path="/about" element={<AboutPage />} />
+                  <Route path="/getReferenceId" element={<GetReferenceId />} />
                   <Route path="/customer" element={<ProtectedRoute />}>
                     <Route path="/customer" element={<CustomerPage />} />
                   </Route>
