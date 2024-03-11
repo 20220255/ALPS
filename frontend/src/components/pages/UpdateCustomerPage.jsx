@@ -6,7 +6,6 @@ import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 
 function UpdateCustomerPage() {
   const { customerPointsData, updateData } = useContext(LoyaltyAppContext);
-  // const { customers } = useSelector((state) => state.cust)
 
   const navigate = useNavigate();
   // const dispatch = useDispatch();
@@ -17,7 +16,6 @@ function UpdateCustomerPage() {
     lastName: "",
     email: "",
     points: 0,
-    lastDateVisited: "",
     refId: "",
     createdAt: "",
   });
@@ -37,29 +35,15 @@ function UpdateCustomerPage() {
     setFormValues(pointsData);
   }, [customerPointsData, id]);
 
-  // const handleIncrement = (e) => {
-  //   e.preventDefault();
-  //   e.target.id = "points";
-  //   setFormValues({ ...formValues, [e.target.id]: formValues.points - 1 });
-  // };
-
-  // const handleDecrement = (e) => {
-  //   e.preventDefault();
-  //   e.target.id = "points";
-  //   setFormValues({ ...formValues, [e.target.id]: formValues.points + 1 });
-  // };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    // dispatch(updateCustomer(formValues))
     updateData(formValues);
     navigate("/customer");
   };
 
   return (
     <Card>
-      <div style={{ textAlign: "left", color: "royalblue" }}>
-      </div>
+      <div style={{ textAlign: "left", color: "royalblue" }}></div>
       <form onSubmit={handleSubmit}>
         <h2>Customer Data Maintenance</h2>
         <div className="padding-b-12">
@@ -100,7 +84,7 @@ function UpdateCustomerPage() {
                 value={formValues.email}
                 id="email"
                 autoComplete="true"
-                style={{width: '500px'}}
+                style={{ width: "500px" }}
               />
             </div>
           </div>
@@ -108,27 +92,21 @@ function UpdateCustomerPage() {
         <div className="padding-b-12">
           <div className="input-group">
             <div>
-              <label htmlFor="points">Total Points: </label>
+              <label htmlFor="points">
+                Total Points Overall:{" "}
+              </label>
               <input
                 type="text"
                 onChange={handleChange}
-                value={formValues.points}
+                // value={formValues.points}
+                value={''}
                 id="points"
                 disabled={true}
               />
-              {/* <button
-                className="btn-sm btn-primary margin-r-10"
-                onClick={handleIncrement}
-              >
-                -
-              </button>
-              <button className="btn-sm btn-primary" onClick={handleDecrement}>
-                +
-              </button> */}
             </div>
           </div>
         </div>
-        <div className="padding-b-12">
+        {/* <div className="padding-b-12">
           <div className="input-group">
             <div>
               <label htmlFor="lastDateVisited">Date Last Visited: </label>
@@ -149,7 +127,7 @@ function UpdateCustomerPage() {
               )}
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="padding-b-12">
           <div className="input-group">
             <div>

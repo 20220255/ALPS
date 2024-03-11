@@ -45,8 +45,7 @@ function CustomerPage() {
             <th>Name</th>
             <th>Last Name</th>
             <th>Email</th>
-            <th>Points</th>
-            <th>Date Last Visited</th>
+            {/* <th>Points</th> */}
           </tr>
 
           {customerPointsData
@@ -64,8 +63,7 @@ function CustomerPage() {
                   <td>{item.name}</td>
                   <td>{item.lastName}</td>
                   <td>{item.email}</td>
-                  <td>{item.points}</td>
-                  <td>{item.lastDateVisited}</td>
+                  {/* <td>{item.points}</td> */}
                   <td>
                     <div className="edit-link">
                       <Link to={`/update-customer/${item._id}`}>

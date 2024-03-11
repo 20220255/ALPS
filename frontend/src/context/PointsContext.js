@@ -23,6 +23,8 @@ export const PointsProvider = ({ children }) => {
   const userLocal = JSON.parse(localStorage.getItem("user"));
   const [latestRef] = useState({});
 
+  
+
 
   // add reference to a user - new free wash
   const addReference = async (userId) => {
