@@ -3,6 +3,7 @@ const Points = require("../models/pointsModel");
 const User = require("../models/userModel");
 const Reference = require("../models/referenceModel");
 const { error } = require("console");
+const { json } = require("express");
 
 // Get points by reference id
 const getPtsListByRef = asyncHandler(async (req, res) => {
@@ -20,13 +21,6 @@ const getPtsListByRef = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
-
-
-
-
-
-
-
 
 // Add points by ref id
 const addPoints = asyncHandler(async (req, res) => {
@@ -65,7 +59,6 @@ const addPoints = asyncHandler(async (req, res) => {
 const getRefIds = asyncHandler(async (req, res) => {
   try {
     const { userId } = req.params;
-    console.log(userId + " userId getrefId PointsController");
     const refIdRecords = await Points.find({ userId });
     if (refIdRecords.length != 0) {
       res.status(200).json(refIdRecords);
@@ -115,10 +108,10 @@ const updatePoints = asyncHandler(async (req, res) => {
 const deletePoints = asyncHandler(async (req, res) => {
   try {
     const { pointsId } = req.params;
-    const { refId } = req.body
-    console.log(pointsId + " points id")
-    console.log(refId + " refid")
-    await Reference.findByIdAndUpdate(refId, {$pull: {pointsIds: pointsId}})
+    const { refId } = req.body;
+    await Reference.findByIdAndUpdate(refId, {
+      $pull: { pointsIds: pointsId },
+    });
     const resp = await Points.findByIdAndDelete(pointsId);
     res.status(200).json(resp);
   } catch (error) {
@@ -126,20 +119,19 @@ const deletePoints = asyncHandler(async (req, res) => {
   }
 });
 
-
 //////////////////////////////////////////////////////////////////
 
 // Get points array obj with ref id
-const getPointsByRef = asyncHandler(async(req, res) => {
+const getPointsByRef = asyncHandler(async (req, res) => {
   try {
     const { refId } = req.params;
-    const points = await Reference.find({_id: refId}).populate('pointsIds')
-    res.status(200).json(points)
+    const points = await Reference.find({ _id: refId }).populate("pointsIds");
+    res.status(200).json(points);
   } catch (error) {
     res.status(400);
     throw new Error(error);
   }
-}) 
+});
 
 // Add points by ref
 const addPointsByRef = asyncHandler(async (req, res) => {
@@ -157,12 +149,13 @@ const addPointsByRef = asyncHandler(async (req, res) => {
     // find related ref id and add the points obj to the ref id
     const refIdObj = await Reference.findOneAndUpdate(
       { _id: refId },
-      { $push: {pointsIds: pointsObj._id} }
-    )
-    
+      { $push: { pointsIds: pointsObj._id } }
+    );
+
     // populate points ids on the ref id
-    const refIdObjAddPts = await Reference.find({_id: refId}).populate("pointsIds")
-    console.log(refIdObjAddPts + ' 162')  
+    const refIdObjAddPts = await Reference.find({ _id: refId }).populate(
+      "pointsIds"
+    );
     res.status(200).json(refIdObjAddPts);
   } catch (error) {
     res.status(400);
@@ -170,8 +163,41 @@ const addPointsByRef = asyncHandler(async (req, res) => {
   }
 });
 
+// get overall total points
+const findTotalPoints = asyncHandler(async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const refIds = await User.findById(userId).select("refIds");
+    const pointIds = await Reference.find({ _id: { $in: refIds.refIds } });
+    const ptsIds = pointIds.map((p) => p.pointsIds);
+    
+    const myPtsArray = [];
+    const getPtsId = async () => {
+      for (let index = 0; index < ptsIds.length; index++) {
+        const element = ptsIds[index];
+        for (let i = 0; i < element.length; i++) {
+          const myElement = element[i];
+          myPtsArray.push(myElement);
+        }
+      }
+    }
+    await getPtsId()
 
-
+    // points from Points document
+    const points = await Points.find({_id: {$in: myPtsArray}})
+    
+    const totalPoints = points.reduce(
+      (accumulator, object) => {
+        return accumulator + object.points;
+      },
+      0
+    );
+    res.status(200).json(totalPoints);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  }
+});
 
 module.exports = {
   getPtsListByRef,
@@ -181,5 +207,6 @@ module.exports = {
   updatePoints,
   deletePoints,
   addPointsByRef,
-  getPointsByRef
+  getPointsByRef,
+  findTotalPoints,
 };

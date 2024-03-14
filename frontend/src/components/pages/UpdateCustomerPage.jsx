@@ -3,10 +3,11 @@ import Card from "../shared/Card";
 import Button from "../shared/Button";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import LoyaltyAppContext from "../../context/LoyaltyAppContext";
+import PointsContext from "../../context/PointsContext";
 
 function UpdateCustomerPage() {
   const { customerPointsData, updateData } = useContext(LoyaltyAppContext);
-
+  const { getOverallPts, overallCustPts } = useContext(PointsContext);
   const navigate = useNavigate();
   // const dispatch = useDispatch();
 
@@ -19,6 +20,8 @@ function UpdateCustomerPage() {
     refId: "",
     createdAt: "",
   });
+
+  const [overallPts, setOverallPts] = useState(0) 
 
   const { id } = useParams();
 
@@ -33,7 +36,13 @@ function UpdateCustomerPage() {
   useEffect(() => {
     const pointsData = customerPointsData.find((item) => item._id === id);
     setFormValues(pointsData);
-  }, [customerPointsData, id]);
+    getOverallPts(id)
+    // setOverallPts(myOverallPts)
+  }, []);
+  // }, [customerPointsData, getOverallPts, id]);
+
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -92,17 +101,7 @@ function UpdateCustomerPage() {
         <div className="padding-b-12">
           <div className="input-group">
             <div>
-              <label htmlFor="points">
-                Total Points Overall:{" "}
-              </label>
-              <input
-                type="text"
-                onChange={handleChange}
-                // value={formValues.points}
-                value={''}
-                id="points"
-                disabled={true}
-              />
+              <label htmlFor="points">Total Points Overall: {overallCustPts} </label>
             </div>
           </div>
         </div>

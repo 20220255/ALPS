@@ -4,6 +4,7 @@ const User = require("../models/userModel");
 const { error } = require("console");
 const { generateRefId } = require("../utils/generateRefId");
 const Reference = require("../models/referenceModel");
+const { use } = require("../routes/userRoutes");
 
 // Create reference IDs
 const createRefId = asyncHandler(async (req, res) => {
@@ -28,14 +29,8 @@ const createRefId = asyncHandler(async (req, res) => {
 // Update Claim
 const updateClaim = asyncHandler(async (req, res) => {
   try {
-    console.log("here - 32");
     const { refId, washClaimed } = req.body;
-
-    console.log(washClaimed + " claimed");
-    console.log(refId + " refId");
-
     const date = new Date();
-
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
@@ -56,18 +51,14 @@ const updateClaim = asyncHandler(async (req, res) => {
 const addReference = asyncHandler(async (req, res) => {
   try {
     const { userId } = req.params;
-
     // Create reference record id
     const refId = await Reference.create({
       refId: await generateRefId(),
     });
-
-    const user = await User.findByIdAndUpdate(userId, {
-      $push: { refIds: refId },
+    const user = await User.findOneAndUpdate({_id: userId}, {
+      $push: { refIds: refId._id },
     });
-
     const userRef = await User.findById(userId).populate("refIds")
-
     res.status(200).json(userRef);
   } catch (error) {}
 });

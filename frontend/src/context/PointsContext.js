@@ -14,6 +14,7 @@ export const PointsProvider = ({ children }) => {
   const [latestRefIdObjs, setLatestRefIdObjs] = useState({});
   const [totalPoints, setTotalPoints] = useState();
   const [pointsData, setPointsData] = useState({});
+  const [overallCustPts, setOverallCustPts] = useState()
   // const [latestPts, setLatestPts] = useState([{}])
 
   const [refList, setRefList] = useState([]);
@@ -235,6 +236,8 @@ export const PointsProvider = ({ children }) => {
       );
       setTotalPoints(totalPoints);
 
+      // get total overall
+
       setLoading(false);
     } catch (error) {
       toast.error(error.response.data.message);
@@ -266,6 +269,19 @@ export const PointsProvider = ({ children }) => {
     }
   };
 
+  // Get overall points
+  const getOverallPts = async(user_id) => {
+    try {
+      const response = await axios.get(API_URL + "find-total-points/" + user_id, {
+        headers: { Authorization: `Bearer ${userLocal.token}` },
+      });
+      const overallCustPts = await response.data
+      setOverallCustPts(overallCustPts)
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+
   return (
     <PointsContext.Provider
       value={{
@@ -281,6 +297,7 @@ export const PointsProvider = ({ children }) => {
         addPointsByRefId,
         updateClaim,
         addReference,
+        getOverallPts,
         refPoints,
         loading,
         userRefData,
@@ -290,6 +307,7 @@ export const PointsProvider = ({ children }) => {
         latestRefIdObjs,
         totalPoints,
         pointsData,
+        overallCustPts
         // latestPts,
       }}
     >

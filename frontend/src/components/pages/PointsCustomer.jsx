@@ -38,6 +38,7 @@ function PointsCustomer() {
     if (pointsArray.length > 0) {
       const totalPoints = await pointsArray
         .map((obj) => obj.points)
+        
         .reduce((accumulator, current) => accumulator + current, 0);
       setTotalPoints(totalPoints);
     }

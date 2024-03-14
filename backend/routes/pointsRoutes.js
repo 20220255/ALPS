@@ -10,10 +10,12 @@ const {
   deletePoints,
   addPointsByRef,
   getPointsByRef,
+  findTotalPoints
 } = require("../controllers/pointsController");
 const { protect, checkAdmin } = require("../middleware/authMiddleware");
 
 router.get("/:refId", protect, getPtsListByRef);
+router.get("/find-total-points/:userId", findTotalPoints);
 router.get("/user/:userId", protect, getRefIds);
 router.get("/point/:_id", protect, checkAdmin, getPoints);
 router.post("/addPoints", protect, checkAdmin, addPoints);
