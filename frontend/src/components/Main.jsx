@@ -20,6 +20,7 @@ function Main({ maxPoints = 6 }) {
   const [pointsLeft, setPointsLeft] = useState(0);
   const [initialRender, setinitialRender] = useState(false);
   const [latestRefIdObj, setLatestRefIdObj] = useState({});
+  const [claimed, setClaimed] = useState(false);
 
   const canvasRef = useRef();
   const confettiRef = useRef();
@@ -27,32 +28,27 @@ function Main({ maxPoints = 6 }) {
   const { isLoading } = useContext(LoyaltyAppContext);
   const { getPointsByRefId, addReference } = useContext(PointsContext);
 
-  const [selectedReferenceDetails] =
-    useState(false);
-
   useEffect(() => {
     setUserLoggedInData(userToken);
-    getLatestRefId();
+    getTotalPtsFromLatestRefId();
     setinitialRender(true);
   }, []);
 
   // get the latest ref id from the logged user
-  const getLatestRefId = async () => {
-    console.log('hello')
+  const getTotalPtsFromLatestRefId = async () => {
     // get the latest Ref ID from the use logged in
     const latestRefIdObj = await userToken.refId.at(-1);
     setLatestRefIdObj(latestRefIdObj);
 
-    console.log(latestRefIdObj._id)
     // get the points from the latest ref id
-    const pts = await getPointsByRefId(latestRefIdObj._id);
-    
-    const latestPtsArray = await pts[0].pointsIds;
+    const latestRefId = await getPointsByRefId(latestRefIdObj._id);
+    const latestPtsArray = await latestRefId[0].pointsIds;
+
     // get the total points from the latest ref id
     const totalPoints = await latestPtsArray
       .map((obj) => obj.points)
       .reduce((accumulator, current) => accumulator + current, 0);
-    return await totalPoints
+    return await totalPoints;
   };
 
   const checkPointsText = (
@@ -61,9 +57,7 @@ function Main({ maxPoints = 6 }) {
 
   // add another reference id if the free wash for the latest ref id has been claimed
   const handleAddRef = async () => {
-    const latestRefId = await getPointsByRefId(latestRefIdObj._id);
-    const isClaimed = await latestRefId[0].claimed;
-    if (isClaimed) {
+    if (claimed) {
       await addReference(userToken._id);
     }
   };
@@ -86,19 +80,15 @@ function Main({ maxPoints = 6 }) {
   const claimedFreeWashText = (
     <>
       <h3>
-        Hi {userLoggedInData.name}! This free wash has been claimed. To get your
-        new Ref ID, just tap or click
-      </h3>
-      <h3 style={{ textAlign: "left", marginLeft: "20px" }}>
-        {" "}
-        <Link to={"/main"} onClick={handleAddRef}>
-          <span style={{ color: "red" }}> Free wash again</span>
-        </Link>
+        Hi {userLoggedInData.name}! This free wash has been claimed. To win
+        another free wash, just tap or click the
+        <span style={{ color: "red" }}> Free Wash</span> button to retrieve your
+        new Ref ID.
       </h3>
     </>
   );
 
-  const handlePointsClaimed = async (points) => {
+  const handlePointsClaimed = async (points, claimed) => {
     if (points >= 6) {
       points = 6;
     }
@@ -111,8 +101,9 @@ function Main({ maxPoints = 6 }) {
       document.querySelector(`#sw00${index}`).style.backgroundColor =
         "lightgray";
     }
-
-    if (points >= 6) {
+    console.log(claimed + " claimed")
+    console.log(points  + " points")
+    if (points >= 6 && !claimed) {
       confettiRef.current = new JSConfetti({ canvas: canvasRef.current });
       confettiRef.current.addConfetti({
         confettiRadius: 5,
@@ -121,11 +112,18 @@ function Main({ maxPoints = 6 }) {
     }
   };
 
-  const handleClick = async() => {
-    const totalPts = await getLatestRefId();
-    setPointsLeft(maxPoints - totalPts);
-    await handlePointsClaimed(totalPts);
+  const handleClick = async () => {
+    // check if free wash has been claimed
+    const lastRefIdObj = await getPointsByRefId(latestRefIdObj._id);
+    const claimed = await lastRefIdObj[0].claimed;
+    setClaimed(claimed);
+
     setinitialRender(false);
+    const totalPts = await getTotalPtsFromLatestRefId();
+    setPointsLeft(maxPoints - totalPts);
+    await handlePointsClaimed(totalPts, claimed);
+    
+
   };
 
   return isLoading ? (
@@ -136,9 +134,9 @@ function Main({ maxPoints = 6 }) {
         <canvas className="canvas" {...{ ...canvasRef }} />
         {initialRender
           ? checkPointsText
-          : pointsLeft === 0 && selectedReferenceDetails
+          : pointsLeft <= 0 && claimed
           ? claimedFreeWashText
-          : pointsLeft === 0
+          : pointsLeft <= 0
           ? completedText
           : uncompletedText}
         <PointsCircles maxPoints={maxPoints} />
@@ -152,9 +150,15 @@ function Main({ maxPoints = 6 }) {
         </div>
 
         <div className="refresh">
-          <button className="btn-md-navy" onClick={handleClick}>
-            Check
-          </button>
+          {claimed ? (
+            <button className="btn-md-navy" onClick={handleAddRef}>
+              Free Wash
+            </button>
+          ) : (
+            <button className="btn-md-navy" onClick={handleClick}>
+              Check
+            </button>
+          )}
         </div>
       </Card>
     </div>
