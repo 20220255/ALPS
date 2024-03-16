@@ -17,20 +17,18 @@ function Main({ maxPoints = 6 }) {
   const userToken = JSON.parse(localStorage.getItem("user"));
 
   const [userLoggedInData, setUserLoggedInData] = useState(userToken);
-
   const [pointsLeft, setPointsLeft] = useState(0);
   const [initialRender, setinitialRender] = useState(false);
-
   const [latestRefIdObj, setLatestRefIdObj] = useState({});
-
-  const [totalPoints, setTotalPoints] = useState(0);
 
   const canvasRef = useRef();
   const confettiRef = useRef();
 
   const { isLoading } = useContext(LoyaltyAppContext);
+  const { getPointsByRefId, addReference } = useContext(PointsContext);
 
-  const { getPointsByRefId } = useContext(PointsContext);
+  const [selectedReferenceDetails] =
+    useState(false);
 
   useEffect(() => {
     setUserLoggedInData(userToken);
@@ -40,24 +38,35 @@ function Main({ maxPoints = 6 }) {
 
   // get the latest ref id from the logged user
   const getLatestRefId = async () => {
+    console.log('hello')
     // get the latest Ref ID from the use logged in
     const latestRefIdObj = await userToken.refId.at(-1);
     setLatestRefIdObj(latestRefIdObj);
 
+    console.log(latestRefIdObj._id)
     // get the points from the latest ref id
     const pts = await getPointsByRefId(latestRefIdObj._id);
-    const latestPtsArray = pts[0].pointsIds;
-
+    
+    const latestPtsArray = await pts[0].pointsIds;
     // get the total points from the latest ref id
     const totalPoints = await latestPtsArray
       .map((obj) => obj.points)
       .reduce((accumulator, current) => accumulator + current, 0);
-    setTotalPoints(totalPoints);
+    return await totalPoints
   };
 
   const checkPointsText = (
     <h3>Hi {userLoggedInData.name}, Click Check button to show your points.</h3>
   );
+
+  // add another reference id if the free wash for the latest ref id has been claimed
+  const handleAddRef = async () => {
+    const latestRefId = await getPointsByRefId(latestRefIdObj._id);
+    const isClaimed = await latestRefId[0].claimed;
+    if (isClaimed) {
+      await addReference(userToken._id);
+    }
+  };
 
   const completedText = (
     <h3>
@@ -74,7 +83,22 @@ function Main({ maxPoints = 6 }) {
     </h3>
   );
 
-  const handlePointsClaimed = (points) => {
+  const claimedFreeWashText = (
+    <>
+      <h3>
+        Hi {userLoggedInData.name}! This free wash has been claimed. To get your
+        new Ref ID, just tap or click
+      </h3>
+      <h3 style={{ textAlign: "left", marginLeft: "20px" }}>
+        {" "}
+        <Link to={"/main"} onClick={handleAddRef}>
+          <span style={{ color: "red" }}> Free wash again</span>
+        </Link>
+      </h3>
+    </>
+  );
+
+  const handlePointsClaimed = async (points) => {
     if (points >= 6) {
       points = 6;
     }
@@ -97,11 +121,10 @@ function Main({ maxPoints = 6 }) {
     }
   };
 
-  const handleClick = async () => {
-    setPointsLeft(maxPoints - totalPoints);
-
-    handlePointsClaimed(totalPoints);
-
+  const handleClick = async() => {
+    const totalPts = await getLatestRefId();
+    setPointsLeft(maxPoints - totalPts);
+    await handlePointsClaimed(totalPts);
     setinitialRender(false);
   };
 
@@ -113,19 +136,19 @@ function Main({ maxPoints = 6 }) {
         <canvas className="canvas" {...{ ...canvasRef }} />
         {initialRender
           ? checkPointsText
-          : pointsLeft <= 0
+          : pointsLeft === 0 && selectedReferenceDetails
+          ? claimedFreeWashText
+          : pointsLeft === 0
           ? completedText
           : uncompletedText}
         <PointsCircles maxPoints={maxPoints} />
         <div>
-          Your Ref ID is{" "}
-          <span style={{ color: "royalblue" }}>
-            <Link to={`/points/${latestRefIdObj._id}/${latestRefIdObj.refId}`}>
-              {latestRefIdObj.refId}
-            </Link>
-          </span>
-          . Please show the Ref ID and a valid ID to the storekeeper when
-          claiming your point. You may also click or tap the Ref ID to show details of your Points.
+          <Link to={`/points/${latestRefIdObj._id}/${latestRefIdObj.refId}`}>
+            <span style={{ color: "royalblue" }}> {latestRefIdObj.refId} </span>
+          </Link>{" "}
+          is your ref ID. Please show the Ref ID and a valid ID to the
+          storekeeper when claiming your point. You may also click or tap the
+          Ref ID to show details of your Points.
         </div>
 
         <div className="refresh">

@@ -55,7 +55,7 @@ export const PointsProvider = ({ children }) => {
 
       setLoading(false);
       
-      return latestPts;
+      return await latestPts;
     } catch (error) {
       toast.error(error.response.data.message);
       setLoading(false);

@@ -51,9 +51,9 @@ function EditPointsPage() {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    updatePoints(formValues)
+  const handleSubmit = async(e) => {
+    await e.preventDefault();
+    await updatePoints(formValues)
     navigate(`/points/${refId}/${refID}`)
   };
 
