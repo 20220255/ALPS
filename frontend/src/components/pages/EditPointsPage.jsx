@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import Card from "../shared/Card";
 import PointsContext from "../../context/PointsContext";
 import Button from "../shared/Button";
-import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 
 function EditPointsPage() {
   const { updatePoints, deletePoints = {}, getPoints } = useContext(PointsContext);
@@ -14,11 +13,8 @@ function EditPointsPage() {
   const [formValues, setFormValues] = useState({
 
     _id,
-    // refId: "",
     pointsDate: "",
     points: 0,
-    // userId: "",
-    // claimed: false,
     comments: "",
     createdAt: "",
   });
