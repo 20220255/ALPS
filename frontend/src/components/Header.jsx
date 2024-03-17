@@ -3,8 +3,7 @@ import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout, reset } from "../features/auth/authSlice";
-import { useContext, useEffect } from "react";
-import { getAllCustomers } from "../features/customer/custSlice";
+import { useContext } from "react";
 import LoyaltyAppContext from "../context/LoyaltyAppContext";
 
 function Header() {

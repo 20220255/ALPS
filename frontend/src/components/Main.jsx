@@ -64,8 +64,7 @@ function Main({ maxPoints = 6 }) {
 
   const completedText = (
     <h3>
-      Congratulations, {userLoggedInData.name}! You may claim your free wash on
-      your next visit.
+      Congratulations, {userLoggedInData.name}! You may now claim your free wash.
     </h3>
   );
 
