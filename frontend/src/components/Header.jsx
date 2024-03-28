@@ -17,7 +17,7 @@ function Header() {
 
   const handleClick = () => {
     // dispatch(getAllCustomers())
-    fetchData()
+    fetchData();
   };
 
   const onLogout = () => {
@@ -27,81 +27,97 @@ function Header() {
   };
 
   return (
-    <header
-      className="header"
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-end",
-      }}
-    >
-      <div
+    <>
+      <header
+        className="header"
         style={{
           display: "flex",
           flexDirection: "row",
-          justifyItems: "flex-end",
-          marginRight: "300px",
+          justifyContent: "flex-end",
+          flexWrap: "nowrap",
+          marginBottom: "10px",
+          marginRight: "10px",
+          // paddingRight: ""
         }}
       >
-        <div>
-          {userToken && (
-            <div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "flex-start",
+            marginLeft: "10px",
+          }}
+        >
+          <div>
+            {userToken && (
               <h2>
                 {userToken ? (
-                  <Link to="/main">
-                    <span>Loyalty Points</span>
-                  </Link>
+                  <span style={{ textAlign: "left" }}>
+                    <Link style={{ marginLeft: "10px" }} to="/main">
+                      Points
+                    </Link>
+                  </span>
                 ) : (
-                  <Link to="/">Loyalty Points</Link>
+                  <Link to="/">Points</Link>
                 )}
               </h2>
-            </div>
-          )}
-        </div>
-        <div>
-          {userToken && userToken.isAdmin === true && (
-            <div style={{ paddingRight: "-5px", marginRight: "-300px" }}>
+            )}
+          </div>
+          <div>
+            {userToken && userToken.isAdmin === true && (
               <h2 onClick={handleClick}>
-                <Link to="/customer">
-                  <span>Customer Updates</span>
+                <Link to="/customer" style={{ marginLeft: "10px" }}>
+                  <span>Customer</span>
                 </Link>
               </h2>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <ul>
-        {userToken ? (
-          <li>
-            <button className="btn-md" onClick={onLogout}>
-              <span style={{ color: "navy" }}>
-                <FaSignOutAlt /> Logout
-              </span>
-            </button>
-          </li>
-        ) : (
-          <div style={{ marginRight: "30px" }}>
-            <ul>
-              <div>
-                <li>
-                  <Link to="/login">
-                    <FaSignInAlt /> Login
-                  </Link>
-                </li>
-              </div>
-              <div>
-                <li>
-                  <Link to="/register">
-                    <FaUser /> Register
-                  </Link>
-                </li>
-              </div>
-            </ul>
+            )}
           </div>
-        )}
-      </ul>
-    </header>
+        </div>
+        <div style={{ width: "100px" }}></div>
+        <div style={{ justifyContent: "flex-end" }}>
+          <ul>
+            {userToken ? (
+              <li>
+                <button className="btn-md" style={{marginRight: "10px"}}  onClick={onLogout}>
+                  <span style={{ color: "navy"}}>
+                    <FaSignOutAlt /> Logout
+                  </span>
+                </button>
+              </li>
+            ) : (
+              <div style={{ marginRight: "30px" }}>
+                <ul>
+                  <div>
+                    <li>
+                      <Link to="/login">
+                        <FaSignInAlt /> Login
+                      </Link>
+                    </li>
+                  </div>
+                  <div>
+                    <li>
+                      <Link to="/register">
+                        <FaUser /> Register
+                      </Link>
+                    </li>
+                  </div>
+                </ul>
+              </div>
+            )}
+          </ul>
+        </div>
+      </header>
+
+      <hr
+        style={{
+          height: "2px",
+          color: "white",
+          backgroundColor: "white",
+          marginBottom: "40px"
+        }}
+      />
+    </>
   );
 }
 

@@ -5,7 +5,6 @@ import Spinner from "../shared/Spinner";
 import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 
 function CustomerPage() {
-
   const [search, setSearch] = useState("");
 
   const { fetchData, customerPointsData, isLoading } =
@@ -22,30 +21,29 @@ function CustomerPage() {
       </>
     );
   }
-  
+
   return isLoading ? (
     <Spinner />
   ) : (
     <div>
       <form style={{ paddingBottom: "30px" }}>
-        <div >
+        <div>
           <input
             id="search"
             className="input-group input-large"
             type="text"
             placeholder="Search customer by name, id or refId"
             onChange={(e) => setSearch(e.target.value)}
-            style={{width: '100%'}}
+            style={{ width: "100%" }}
           />
         </div>
       </form>
       <table>
         <tbody>
           <tr>
+            <th>Edit</th>
             <th>Name</th>
             <th>Last Name</th>
-            <th>Email</th>
-            {/* <th>Points</th> */}
           </tr>
 
           {customerPointsData
@@ -60,10 +58,6 @@ function CustomerPage() {
             .map((item, index) => {
               return (
                 <tr key={index}>
-                  <td>{item.name}</td>
-                  <td>{item.lastName}</td>
-                  <td>{item.email}</td>
-                  {/* <td>{item.points}</td> */}
                   <td>
                     <div className="edit-link">
                       <Link to={`/update-customer/${item._id}`}>
@@ -71,6 +65,8 @@ function CustomerPage() {
                       </Link>
                     </div>
                   </td>
+                  <td>{item.name}</td>
+                  <td>{item.lastName}</td>
                 </tr>
               );
             })}
