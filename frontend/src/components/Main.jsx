@@ -52,7 +52,10 @@ function Main({ maxPoints = 6 }) {
   };
 
   const checkPointsText = (
-    <h3>Hi {userLoggedInData.name}, Click Check button to show your points.</h3>
+    <h3>
+      Hi {userLoggedInData.name}, Click{" "}
+      <span style={{ color: "red" }}> Check</span> button to show your points.
+    </h3>
   );
 
   // add another reference id if the free wash for the latest ref id has been claimed
@@ -64,7 +67,8 @@ function Main({ maxPoints = 6 }) {
 
   const completedText = (
     <h3>
-      Congratulations, {userLoggedInData.name}! You may now claim your free wash.
+      Congratulations, {userLoggedInData.name}! You may now claim your free
+      wash.
     </h3>
   );
 
@@ -100,8 +104,8 @@ function Main({ maxPoints = 6 }) {
       document.querySelector(`#sw00${index}`).style.backgroundColor =
         "lightgray";
     }
-    console.log(claimed + " claimed")
-    console.log(points  + " points")
+    console.log(claimed + " claimed");
+    console.log(points + " points");
     if (points >= 6 && !claimed) {
       confettiRef.current = new JSConfetti({ canvas: canvasRef.current });
       confettiRef.current.addConfetti({
@@ -121,8 +125,6 @@ function Main({ maxPoints = 6 }) {
     const totalPts = await getTotalPtsFromLatestRefId();
     setPointsLeft(maxPoints - totalPts);
     await handlePointsClaimed(totalPts, claimed);
-    
-
   };
 
   return isLoading ? (
@@ -143,9 +145,8 @@ function Main({ maxPoints = 6 }) {
           <Link to={`/points/${latestRefIdObj._id}/${latestRefIdObj.refId}`}>
             <span style={{ color: "royalblue" }}> {latestRefIdObj.refId} </span>
           </Link>{" "}
-          is your ref ID. Please show the Ref ID and a valid ID to the
-          storekeeper when claiming your point. You may also click or tap the
-          Ref ID to show details of your Points.
+          is your Ref ID. Click or tap the Ref ID to show details of your
+          points.
         </div>
 
         <div className="refresh">
