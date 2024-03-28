@@ -53,8 +53,9 @@ function Main({ maxPoints = 6 }) {
 
   const checkPointsText = (
     <h3>
-      Hi {userLoggedInData.name}, Click{" "}
-      <span style={{ color: "red" }}> Check</span> button to show your points.
+      Hi {userLoggedInData.name}, Click or tap the{" "}
+      <span style={{ color: "red" }}> Check</span> button below to show your
+      points.
     </h3>
   );
 
