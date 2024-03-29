@@ -40,7 +40,7 @@ function CustomerPage() {
       </form>
       <table>
         <tbody>
-          <tr>
+          <tr style={{backgroundColor: "blueviolet", color: "black"}}>
             <th>Edit</th>
             <th>Name</th>
             <th>Last Name</th>
@@ -57,7 +57,7 @@ function CustomerPage() {
             })
             .map((item, index) => {
               return (
-                <tr key={index}>
+                <tr key={index} className="customer-row">
                   <td>
                     <div className="edit-link">
                       <Link to={`/update-customer/${item._id}`}>
