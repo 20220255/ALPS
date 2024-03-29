@@ -97,16 +97,23 @@ function Main({ maxPoints = 6 }) {
       points = 6;
     }
 
-    for (let index = 1; index <= points; index++) {
-      document.querySelector(`#sw00${index}`).style.backgroundColor =
-        "lightblue";
+    function sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
     }
+
+    for (let index = 1; index <= points; index++) {
+      document.querySelector(`#sw00${index}`).style.animation =
+        "circle 0.5s ease-in";
+      document.querySelector(`#sw00${index}`).style.backgroundColor = "coral";
+      document.querySelector(`#sw00${index}`).style.color = "white";
+      await sleep(250);
+    }
+
     for (let index = maxPoints; index > points; index--) {
       document.querySelector(`#sw00${index}`).style.backgroundColor =
         "lightgray";
     }
-    console.log(claimed + " claimed");
-    console.log(points + " points");
+
     if (points >= 6 && !claimed) {
       confettiRef.current = new JSConfetti({ canvas: canvasRef.current });
       confettiRef.current.addConfetti({

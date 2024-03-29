@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
 
 * {
   box-sizing: border-box;
@@ -7,7 +7,7 @@
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: #202142;
   color: #fff;
   line-height: 1.6;
@@ -115,16 +115,16 @@ ul {
 
 .rating li:hover,
 .num-display {
-  background: #33FBFF;
-  color: #424A4A;
+  background: #33fbff;
+  color: #424a4a;
 }
 
-[type='radio'] {
+[type="radio"] {
   opacity: 0;
   background: #ff6a95;
 }
 
-[type='radio']:checked ~ label {
+[type="radio"]:checked ~ label {
   background: #ff6a95;
   color: #fff;
 }
@@ -376,7 +376,6 @@ input:focus {
   animation: spin 1.2s linear infinite;
 }
 
-
 div.circle {
   display: inline-block;
   width: 70px;
@@ -389,14 +388,67 @@ div.circle {
   text-align: center;
 }
 
+@keyframes circle {
+  from {
+    background-color: lightgray;
+  }
+
+  to {
+    background-color: coral;
+    color: white;
+  }
+}
+
+@keyframes circle {
+  from {
+    background-color: lightgray;
+  }
+  to {
+    background-color: coral;
+    color: white;
+  }
+  0% {
+    transform: translate(2px, 1px) rotate(0deg);
+  }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+  30% {
+    transform: translate(0px, 2px) rotate(0deg);
+  }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+  70% {
+    transform: translate(2px, 1px) rotate(-1deg);
+  }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+  90% {
+    transform: translate(2px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
+}
+
 button.points {
   height: 75px;
   width: 727px;
   border-radius: 15px;
-  background-color: #33FBFF;
+  background-color: #33fbff;
   cursor: pointer;
 }
-
 
 .App {
   width: 100%;
@@ -420,7 +472,6 @@ td {
   text-align: center;
 }
 
-
 .padding-b-12 {
   padding-bottom: 12px;
 }
@@ -436,7 +487,7 @@ td {
   padding: 20px 0;
   /* border-bottom: 1px solid #e6e6e6; */
   margin-bottom: 15px;
-  }
+}
 
 .header ul {
   display: flex;
@@ -444,7 +495,7 @@ td {
   /* justify-content: space-between; */
 }
 
-.header div h2 a{
+.header div h2 a {
   color: rgb(248, 250, 250);
   margin-left: 50px;
 }
