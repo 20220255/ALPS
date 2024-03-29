@@ -152,11 +152,11 @@ function Main({ maxPoints = 6 }) {
 
         <div className="refresh">
           {claimed ? (
-            <button className="btn-md-navy" onClick={handleAddRef}>
+            <button className="btn-md-navy-wide" onClick={handleAddRef}>
               Free Wash
             </button>
           ) : (
-            <button className="btn-md-navy" onClick={handleClick}>
+            <button className="btn-md-navy-wide" onClick={handleClick}>
               Check
             </button>
           )}
