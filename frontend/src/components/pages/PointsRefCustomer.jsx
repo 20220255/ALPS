@@ -42,7 +42,7 @@ function PointsRefCustomer() {
           {custDetailsRef.refIds &&
             custDetailsRef.refIds.map((r, index) => {
               return (
-                <tr key={index}>
+                <tr key={index} className="customer-row">
                   <td>
                     <Link to={`/points/${r._id}/${r.refId}`}>{r.refId}</Link>
                   </td>

@@ -159,7 +159,7 @@ function PointsCustomer() {
             {pointsArray.length > 0 ? (
               pointsArray.map((points, index) => {
                 return (
-                  <tr key={index}>
+                  <tr key={index} className="customer-row">
                     <td>{points.pointsDate}</td>
                     <td>{points.points}</td>
                     <td>{points.comments}</td>
