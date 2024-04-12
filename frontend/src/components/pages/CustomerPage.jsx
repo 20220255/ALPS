@@ -18,7 +18,7 @@ function CustomerPage() {
     console.log(customerData);
   }, []);
 
-  function handleSortAscend(sort) {
+  function handleSortAscend(sort="") {
     const custdata = [...customerData];
     custdata.sort((a, b) => (a[sort] > b[sort] ? 1 : -1));
     setCustomerData(custdata);
