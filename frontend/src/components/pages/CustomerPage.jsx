@@ -10,11 +10,22 @@ function CustomerPage() {
   const { fetchData, customerPointsData, isLoading } =
     useContext(LoyaltyAppContext);
 
+  const [customerData, setCustomerData] = useState(customerPointsData);
+
   useEffect(() => {
     fetchData();
+    setCustomerData(customerPointsData);
+    console.log(customerData);
   }, []);
 
-  if (!isLoading && (!customerPointsData || customerPointsData.length === 0)) {
+  function handleSortAscend(sort) {
+    const custdata = [...customerData];
+    custdata.sort((a, b) => (a[sort] > b[sort] ? 1 : -1));
+    setCustomerData(custdata);
+  }
+
+  // if (!isLoading && (!customerPointsData || customerPointsData.length === 0)) {
+  if (!isLoading && (!customerData || customerData.length === 0)) {
     return (
       <>
         <Spinner />
@@ -40,13 +51,28 @@ function CustomerPage() {
       </form>
       <table>
         <tbody>
-          <tr style={{backgroundColor: "blueviolet", color: "black"}}>
+          <tr style={{ backgroundColor: "blueviolet", color: "black" }}>
             <th>Edit</th>
-            <th>Name</th>
-            <th>Last Name</th>
+            <th
+              className="customer-row"
+              onClick={() => {
+                handleSortAscend("name");
+              }}
+            >
+              Name
+            </th>
+            <th
+              className="customer-row"
+              onClick={() => {
+                handleSortAscend("lastName");
+              }}
+            >
+              Last Name
+            </th>
           </tr>
 
-          {customerPointsData
+          {/* {customerPointsData */}
+          {customerData
             .filter((item) => {
               return search.toLowerCase() === ""
                 ? item
