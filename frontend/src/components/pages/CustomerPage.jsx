@@ -10,22 +10,24 @@ function CustomerPage() {
   const { fetchData, customerPointsData, isLoading } =
     useContext(LoyaltyAppContext);
 
-  const [customerData, setCustomerData] = useState(customerPointsData);
+  const [customerData, setCustomerData] = useState([{}]);
 
   useEffect(() => {
     fetchData();
-    setCustomerData(customerPointsData);
-    console.log(customerData);
   }, []);
 
-  function handleSortAscend(sort="") {
-    const custdata = [...customerData];
+  function handleSortAscend(sort = "") {
+    const custdata = [...customerPointsData];
     custdata.sort((a, b) => (a[sort] > b[sort] ? 1 : -1));
     setCustomerData(custdata);
   }
 
+  const getData = () => {
+    setCustomerData(customerPointsData);
+  };
+
   // if (!isLoading && (!customerPointsData || customerPointsData.length === 0)) {
-  if (!isLoading && (!customerData || customerData.length === 0)) {
+  if (!isLoading && !customerPointsData) {
     return (
       <>
         <Spinner />
@@ -35,6 +37,10 @@ function CustomerPage() {
 
   return isLoading ? (
     <Spinner />
+  ) : customerData.length === 1 ? (
+    <button className="btn-md-navy-wide" type="button" onClick={getData}>
+      Show Customers
+    </button>
   ) : (
     <div>
       <form style={{ paddingBottom: "30px" }}>

@@ -33,12 +33,14 @@ export const LoyaltyAppProvider = ({ children }) => {
       });
 
       const data = await response.data;
-
+      // return data
+      console.log(data)
       setCustomerPointsData(data);
-
+      console.log(customerPointsData)
+      // console.log("hello6")
       setIsLoading(false);
 
-      setErrMsg("");
+      // setErrMsg("");
     } catch (error) {
       toast.error(error.response.data.message);
 
