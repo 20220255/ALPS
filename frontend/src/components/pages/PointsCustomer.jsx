@@ -200,6 +200,9 @@ function PointsCustomer() {
         Free wash claimed: {selectedReferenceDetails ? "Yes" : "No"}
         {/* Free wash claimed: {claim ? "Yes" : "No"} */}
       </div>
+      <div  style={{ display: "flex", marginTop: "10px", fontSize: "18px", color: "green" }}>
+          Note: Add 0 pts and "1 free wash" in the comment before you can click Claim button
+      </div>
     </div>
   );
 
