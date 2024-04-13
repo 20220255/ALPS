@@ -1,4 +1,4 @@
-import { Chart } from "react-google-charts";
+// import { Chart } from "react-google-charts";
 
 function DataPage() {
   const data = [
