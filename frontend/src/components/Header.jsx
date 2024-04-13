@@ -83,6 +83,16 @@ function Header() {
             )}
           </div>
 
+          <div>
+            {userToken && userToken.isAdmin === true && (
+              <h2>
+                <Link to="/data" style={{ marginLeft: "10px" }}>
+                  <span>Data</span>
+                </Link>
+              </h2>
+            )}
+          </div>
+
         </div>
         <div style={{ width: "100px" }}></div>
         <div style={{ justifyContent: "flex-end" }}>
