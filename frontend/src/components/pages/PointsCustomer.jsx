@@ -18,7 +18,9 @@ function PointsCustomer() {
     {},
   ]);
 
-  
+  // state to check if 0 has been added in the points (boolean).
+  // If 0 has been added, only then will the Claim button will appear.
+  const [addedZero, setAddedZero] = useState();
 
   useEffect(() => {
     getLatestPtsFromRefId();
@@ -27,7 +29,6 @@ function PointsCustomer() {
 
   // get the pts from ref id
   const getLatestPtsFromRefId = async () => {
-    
     const pts = await getPointsByRefId(refId);
     const claimed = await pts[0].claimed;
     getSelectedReferenceDetails(claimed);
@@ -38,10 +39,16 @@ function PointsCustomer() {
     if (pointsArray.length > 0) {
       const totalPoints = await pointsArray
         .map((obj) => obj.points)
-        
+
         .reduce((accumulator, current) => accumulator + current, 0);
       setTotalPoints(totalPoints);
     }
+
+    // some method to check if 0 points has been added to the ref id
+    // this will determine if Claim button should appear.
+    setAddedZero(pointsArray.some(item => item.points === 0))
+    
+
   };
 
   // claim free wash
@@ -58,10 +65,8 @@ function PointsCustomer() {
 
   // add another reference after free wash
   const handleAddRef = async () => {
-    await addReference(userToken._id)
-    
-  }
-
+    await addReference(userToken._id);
+  };
 
   if (pointsArray.length < 1) {
     return loading ? (
@@ -106,7 +111,9 @@ function PointsCustomer() {
         </div>
         {selectedReferenceDetails && totalPoints >= 6 && (
           <div className="ptsRefId" style={{ float: "right" }}>
-              <button onClick={handleAddRef} className="btn-md">Free Wash Again?</button>
+            <button onClick={handleAddRef} className="btn-md">
+              Free Wash Again?
+            </button>
           </div>
         )}
 
@@ -120,7 +127,8 @@ function PointsCustomer() {
                 <button className="btn-md">Add Points</button>
               </Link>
             </div>
-            {totalPoints >= 6 && (
+            {/* Check if points has at least 6 pts and 0 has been added for the free wash */}
+            {totalPoints >= 6 && addedZero && (
               <div className="ptsRefId" style={{ float: "right" }}>
                 <button
                   onClick={() => handleClaim(selectedReferenceDetails)}

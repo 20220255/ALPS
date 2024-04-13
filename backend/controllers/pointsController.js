@@ -167,10 +167,14 @@ const addPointsByRef = asyncHandler(async (req, res) => {
 const findTotalPoints = asyncHandler(async (req, res) => {
   try {
     const { userId } = req.params;
+    // get all ref ids of user from User
     const refIds = await User.findById(userId).select("refIds");
+    // get all reference objects from Reference of the ref ids found from User
     const pointIds = await Reference.find({ _id: { $in: refIds.refIds } });
+    // get all the pointsId
     const ptsIds = pointIds.map((p) => p.pointsIds);
-    
+
+    // convert to pointsId into array - myPtsArray
     const myPtsArray = [];
     const getPtsId = async () => {
       for (let index = 0; index < ptsIds.length; index++) {
@@ -180,22 +184,30 @@ const findTotalPoints = asyncHandler(async (req, res) => {
           myPtsArray.push(myElement);
         }
       }
-    }
-    await getPtsId()
+    };
+    await getPtsId();
 
+    // use myPtsArray as a criteria to get the points from Points table
     // points from Points document
-    const points = await Points.find({_id: {$in: myPtsArray}})
-    
-    const totalPoints = points.reduce(
-      (accumulator, object) => {
-        return accumulator + object.points;
-      },
-      0
-    );
+    const points = await Points.find({ _id: { $in: myPtsArray } });
+
+    // add all points from selected pointsId
+    const totalPoints = points.reduce((accumulator, object) => {
+      return accumulator + object.points;
+    }, 0);
     res.status(200).json(totalPoints);
   } catch (error) {
     res.status(400);
     throw new Error(error);
+  }
+});
+
+const getTotalPtsPerCust = asyncHandler(async(req, res) => {
+  try {
+    
+  } catch (error) {
+    res.status(400);
+    throw new Error(error)
   }
 });
 

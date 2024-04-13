@@ -22,6 +22,7 @@ import AddPoints from "./components/pages/AddPoints";
 import PointsRefCustomer from "./components/pages/PointsRefCustomer";
 import EditPointsPage from "./components/pages/EditPointsPage";
 import GetReferenceId from "./components/pages/GetReferenceId";
+import DataPage from "./components/pages/DataPage";
 
 function App() {
   return (
@@ -43,6 +44,9 @@ function App() {
                   <Route path="/getReferenceId" element={<GetReferenceId />} />
                   <Route path="/customer" element={<ProtectedRoute />}>
                     <Route path="/customer" element={<CustomerPage />} />
+                  </Route>
+                  <Route path="/data" element={<ProtectedRoute />}>
+                    <Route path="/data" element={<DataPage />} />
                   </Route>
                   <Route path="/points/:refId/:refID" element={<ProtectedRoute />}>
                     <Route path="/points/:refId/:refID" element={<PointsCustomer />} />
