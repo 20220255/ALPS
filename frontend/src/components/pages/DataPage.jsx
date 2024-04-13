@@ -2,7 +2,7 @@ import {Chart} from 'react-google-charts'
 
 
 function DataPage() {
-  const data = [
+  const mydata = [
     { name: "Task", hours: "Hours per Day" },
     { name: "Work", hours: 5 },
     { name: "Eat", hours: 2 },
@@ -11,7 +11,7 @@ function DataPage() {
     { name: "Sleep", hours: 7 },
   ];
 
-  const entries = data.map(({ name, hours }) => [name, hours]);
+  const entries = mydata.map(({ name, hours }) => [name, hours]);
   console.log(entries);
 
   const options = {
