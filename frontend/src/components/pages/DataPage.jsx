@@ -21,13 +21,13 @@ function DataPage() {
   return (
     <>
       <h1>Customer Data Chart</h1>
-      <Chart
+      {/* <Chart
         chartType="PieChart"
         data={entries}
         options={options}
         width={"100%"}
         height={"400px"}
-      />
+      /> */}
     </>
   );
 }
