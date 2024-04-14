@@ -45,14 +45,14 @@ function App() {
                   <Route path="/customer" element={<ProtectedRoute />}>
                     <Route path="/customer" element={<CustomerPage />} />
                   </Route>
-                  <Route path="/points/:refId/:refID" element={<ProtectedRoute />}>
-                    <Route path="/points/:refId/:refID" element={<PointsCustomer />} />
+                  <Route path="/points/:refId/:refID/:userId" element={<ProtectedRoute />}>
+                    <Route path="/points/:refId/:refID/:userId" element={<PointsCustomer />} />
                   </Route>
                   <Route path="/data" element={<DataPage />} >
                     <Route path="/data" element={<DataPage />} />
                   </Route>
-                  <Route path="/points-maintenance/:refID/:refId" element={<ProtectedRoute />}>
-                    <Route path="/points-maintenance/:refID/:refId" element={<AddPoints />} />
+                  <Route path="/points-maintenance/:refID/:refId/:userId" element={<ProtectedRoute />}>
+                    <Route path="/points-maintenance/:refID/:refId/:userId" element={<AddPoints />} />
                   </Route>
                   <Route path="/refId/:userId" element={<ProtectedRoute />}>
                     <Route path="/refId/:userId" element={<PointsRefCustomer />} />
@@ -68,11 +68,11 @@ function App() {
                     ></Route>
                   </Route>
                   <Route
-                    exact path="/edit-points/:_id/:refId/:refID" 
+                    exact path="/edit-points/:_id/:refId/:refID/:userId" 
                     element={<ProtectedRoute />}
                   >
                     <Route
-                      exact path="/edit-points/:_id/:refId/:refID" 
+                      exact path="/edit-points/:_id/:refId/:refID/:userId" 
                       element={<EditPointsPage />}
                     ></Route>
                   </Route>

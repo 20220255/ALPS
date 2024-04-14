@@ -5,9 +5,11 @@ import PointsContext from "../../context/PointsContext";
 import Button from "../shared/Button";
 
 function EditPointsPage() {
+
+  
   const { updatePoints, deletePoints = {}, getPoints } = useContext(PointsContext);
   
-  const { _id, refId, refID } = useParams();
+  const { _id, refId, refID, userId } = useParams();
 
   // const [formValues, setFormValues] = useState({ pointsData  });
   const [formValues, setFormValues] = useState({
@@ -24,7 +26,6 @@ function EditPointsPage() {
   const [isChecked, setIsChecked] = useState(false);
 
   const navigate = useNavigate();
-
 
   useEffect(() => {
     // find the points from the points table using the id parameter
@@ -50,7 +51,7 @@ function EditPointsPage() {
   const handleSubmit = async(e) => {
     await e.preventDefault();
     await updatePoints(formValues)
-    navigate(`/points/${refId}/${refID}`)
+    navigate(`/points/${refId}/${refID}/${userId}`)
   };
 
   const handleIncrement = (e) => {
@@ -71,7 +72,7 @@ function EditPointsPage() {
     if (isConfirmed) {
         await deletePoints(deleteParams)
     }
-    navigate(`/points/${refId}/${refID}`)
+    navigate(`/points/${refId}/${refID}/${userId}`)
   }
 
   return (

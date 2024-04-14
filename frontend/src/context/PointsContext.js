@@ -14,7 +14,7 @@ export const PointsProvider = ({ children }) => {
   const [latestRefIdObjs, setLatestRefIdObjs] = useState({});
   const [totalPoints, setTotalPoints] = useState();
   const [pointsData, setPointsData] = useState({});
-  const [overallCustPts, setOverallCustPts] = useState()
+  const [overallCustPts, setOverallCustPts] = useState();
   // const [latestPts, setLatestPts] = useState([{}])
 
   const [refList, setRefList] = useState([]);
@@ -24,25 +24,25 @@ export const PointsProvider = ({ children }) => {
   const userLocal = JSON.parse(localStorage.getItem("user"));
   const [latestRef] = useState({});
 
-  
-
-
   // add reference to a user - new free wash
   const addReference = async (userId) => {
     try {
-      setLoading(true)
-      const response = await axios.patch(API_REF_URL + "add-reference/" + userId, {
-        headers: { Authorization: `Bearer ${userLocal.token}` },
-      })
-      setLoading(false)
-      toast.success(response)
+      setLoading(true);
+      const response = await axios.patch(
+        API_REF_URL + "add-reference/" + userId,
+        {
+          headers: { Authorization: `Bearer ${userLocal.token}` },
+        }
+      );
+      setLoading(false);
+      toast.success(response);
       navigate("/getReferenceId");
     } catch (error) {
       toast.error(error.response.data.message);
       setLoading(false);
       navigate("/main");
     }
-  }
+  };
 
   // get points obj array from ref id
   const getPointsByRefId = async (refId) => {
@@ -54,7 +54,7 @@ export const PointsProvider = ({ children }) => {
       const latestPts = await response.data;
 
       setLoading(false);
-      
+
       return await latestPts;
     } catch (error) {
       toast.error(error.response.data.message);
@@ -129,22 +129,15 @@ export const PointsProvider = ({ children }) => {
     }
   };
 
-
   // delete points
   const deletePoints = async (deleteIds) => {
     try {
       setLoading(true);
       const { pointsId, refId } = deleteIds;
-      await axios.delete(
-        API_URL + "delete-points/" + pointsId,
-        {
-          headers: { Authorization: `Bearer ${userLocal.token}` },
-        },
-        { data: { refId },  },
-
-      );
-
-      // setPointsData({ ...refPoints, ...updatedPoints });
+      await axios.delete(API_URL + "delete-points/" + pointsId, {
+        headers: { Authorization: `Bearer ${userLocal.token}` },
+        data: { refId },
+      });
 
       setLoading(false);
 
@@ -165,8 +158,8 @@ export const PointsProvider = ({ children }) => {
 
   // add points by ref id
   const addPointsByRefId = async (ptsData) => {
-    setLoading(true);
     try {
+      setLoading(true)
       const response = await axios.post(
         API_URL + "addPointsByRef/" + ptsData.refId,
         ptsData,
@@ -174,7 +167,9 @@ export const PointsProvider = ({ children }) => {
           headers: { Authorization: `Bearer ${userLocal.token}` },
         }
       );
-      navigate(`/points/${response.data[0]._id}/${response.data[0].refId}`);
+      navigate(
+        `/points/${response.data[0]._id}/${response.data[0].refId}/${ptsData.userId}`
+      );
       setLoading(false);
       toast.success("Points added successfully.");
     } catch (error) {
@@ -270,17 +265,34 @@ export const PointsProvider = ({ children }) => {
   };
 
   // Get overall points
-  const getOverallPts = async(user_id) => {
+  const getOverallPts = async (user_id) => {
     try {
-      const response = await axios.get(API_URL + "find-total-points/" + user_id, {
-        headers: { Authorization: `Bearer ${userLocal.token}` },
-      });
-      const overallCustPts = await response.data
-      setOverallCustPts(overallCustPts)
+      const response = await axios.get(
+        API_URL + "find-total-points/" + user_id,
+        {
+          headers: { Authorization: `Bearer ${userLocal.token}` },
+        }
+      );
+      const overallCustPts = await response.data;
+      setOverallCustPts(overallCustPts);
     } catch (error) {
       toast.error(error.response.data.message);
     }
-  }
+  };
+
+  const getTotalPtsPerCust = async () => {
+    try {
+      const response = await axios.get(API_URL + "get-total-points", {
+        headers: { Authorization: `Bearer ${userLocal.token}` },
+      });
+
+      const totalPtsPerCust = await response.data;
+
+      console.log(totalPtsPerCust);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
 
   return (
     <PointsContext.Provider
@@ -298,6 +310,7 @@ export const PointsProvider = ({ children }) => {
         updateClaim,
         addReference,
         getOverallPts,
+        getTotalPtsPerCust,
         refPoints,
         loading,
         userRefData,
@@ -307,7 +320,7 @@ export const PointsProvider = ({ children }) => {
         latestRefIdObjs,
         totalPoints,
         pointsData,
-        overallCustPts
+        overallCustPts,
         // latestPts,
       }}
     >

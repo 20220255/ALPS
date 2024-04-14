@@ -5,7 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 
 function PointsCustomer() {
-  const { refId, refID } = useParams();
+  const { refId, refID, userId } = useParams();
 
   const { refPoints, loading, getPointsByRefId, updateClaim, addReference } =
     useContext(PointsContext);
@@ -77,7 +77,7 @@ function PointsCustomer() {
           </div>
           {userToken && userToken.isAdmin === true && (
             <div className="ptsRefId" style={{ float: "right" }}>
-              <Link to={`/points-maintenance/${refID}/${refId}`}>
+              <Link to={`/points-maintenance/${refID}/${refId}/${userId}`}>
                 <button className="btn-md">Add Points</button>
               </Link>
             </div>
@@ -121,7 +121,7 @@ function PointsCustomer() {
               className="ptsRefId"
               style={{ float: "right", marginRight: "5px" }}
             >
-              <Link to={`/points-maintenance/${refID}/${refId}`}>
+              <Link to={`/points-maintenance/${refID}/${refId}/${userId}`}>
                 <button className="btn-md">Add Points</button>
               </Link>
             </div>
@@ -173,7 +173,7 @@ function PointsCustomer() {
                       {userToken && userToken.isAdmin === true && (
                         <div className="edit-link">
                           <Link
-                            to={`/edit-points/${points._id}/${refId}/${refID}`}
+                            to={`/edit-points/${points._id}/${refId}/${refID}/${userId}`}
                           >
                             <FaEdit size={18} />
                           </Link>

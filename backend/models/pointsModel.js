@@ -12,6 +12,9 @@ const pointsSchema = mongoose.Schema(
         comments: {
             type: String
         },
+        userId: {
+            type: mongoose.Schema.Types.ObjectId, ref: "User"
+        },
         
     },
     {

@@ -10,10 +10,13 @@ const {
   deletePoints,
   addPointsByRef,
   getPointsByRef,
-  findTotalPoints
+  findTotalPoints,
+  getTotalPtsPerCust
 } = require("../controllers/pointsController");
-const { protect, checkAdmin } = require("../middleware/authMiddleware");
 
+const { protect, checkAdmin } = require("../middleware/authMiddleware");
+// Todo task getTotalPtsPerCustomer
+router.get("/get-total-points", getTotalPtsPerCust);
 router.get("/:refId", protect, getPtsListByRef);
 router.get("/find-total-points/:userId", findTotalPoints);
 router.get("/user/:userId", protect, getRefIds);

@@ -24,6 +24,7 @@ const getPtsListByRef = asyncHandler(async (req, res) => {
 
 // Add points by ref id
 const addPoints = asyncHandler(async (req, res) => {
+  
   const { refId, pointsDate, claimed, points, userId, comments } = req.body;
 
   if (!refId || !pointsDate || !userId || !comments) {
@@ -137,13 +138,13 @@ const getPointsByRef = asyncHandler(async (req, res) => {
 const addPointsByRef = asyncHandler(async (req, res) => {
   try {
     const { refId } = req.params;
-    const { pointsDate, points, comments } = req.body;
-
+    const { pointsDate, points, comments, userId } = req.body;
     // add points
     const pointsObj = await Points.create({
       pointsDate,
       points,
       comments,
+      userId,
     });
 
     // find related ref id and add the points obj to the ref id
@@ -202,12 +203,31 @@ const findTotalPoints = asyncHandler(async (req, res) => {
   }
 });
 
-const getTotalPtsPerCust = asyncHandler(async(req, res) => {
+// get total points per customer ToDo task
+const getTotalPtsPerCust = asyncHandler(async (req, res) => {
   try {
-    
+    console.log("getTotalPtsPerCust");
+    const ptsPerCust = await Points.find({}).select("userId points");
+    res.status(200).json(ptsPerCust);
+
+    // var result2 = result.reduce((acc, val) => {
+    //   var o = acc
+    //     .filter((obj) => {
+    //       return obj.name === val.userId;
+    //     })
+    //     .pop() || { name: val.userId, value: 0 };
+    //   o.value += val.points;
+    //   acc.push(o);
+    //   return acc;
+    // }, []);
+
+    // console.log(result2)
+
+    // res.status(200).json(result2);
+
   } catch (error) {
     res.status(400);
-    throw new Error(error)
+    throw new Error(error);
   }
 });
 
@@ -221,4 +241,5 @@ module.exports = {
   addPointsByRef,
   getPointsByRef,
   findTotalPoints,
+  getTotalPtsPerCust,
 };

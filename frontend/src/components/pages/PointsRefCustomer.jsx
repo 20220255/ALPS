@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
-import PointsContext from "../../context/PointsContext";
+import React, { useContext, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 import Spinner from "../shared/Spinner";
 
 function PointsRefCustomer() {
-  useContext(PointsContext);
 
   const { isLoading, custDetailsRef, getCustDetailsRef } =
     useContext(LoyaltyAppContext);
@@ -44,7 +42,7 @@ function PointsRefCustomer() {
               return (
                 <tr key={index} className="customer-row">
                   <td>
-                    <Link to={`/points/${r._id}/${r.refId}`}>{r.refId}</Link>
+                    <Link to={`/points/${r._id}/${r.refId}/${custDetailsRef._id}`}>{r.refId}</Link>
                   </td>
                   <td>{r.claimed ? "Yes" : "No"}</td>
                   <td>{r.claimDate}</td>

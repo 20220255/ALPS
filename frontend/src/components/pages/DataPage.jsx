@@ -1,4 +1,6 @@
+import { useContext } from 'react';
 import {Chart} from 'react-google-charts'
+import PointsContext from '../../context/PointsContext';
 
 
 function DataPage() {
@@ -19,6 +21,12 @@ function DataPage() {
     is3D: true,
   };
 
+  // Todo Task getTotal Points per Customer
+  const { getTotalPtsPerCust } =  useContext(PointsContext);
+  const handleClick = () => {
+    getTotalPtsPerCust()
+  }
+
   return (
     <>
       <h1>Customer Data Chart</h1>
@@ -29,6 +37,7 @@ function DataPage() {
         width={"100%"}
         height={"400px"}
       />
+      <button onClick={handleClick} >Test</button>
     </>
   );
 }

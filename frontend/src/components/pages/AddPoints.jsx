@@ -19,7 +19,7 @@ function AddPoints() {
 
   const { pointsDate, points, comments } = formValues;
 
-  const { refID, refId } = useParams();
+  const { refID, refId, userId } = useParams();
 
   const [isChecked, setIsChecked] = useState(false);
 
@@ -47,7 +47,7 @@ function AddPoints() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const pointsData = {
-      // refId: latestRefIdObj._id,
+      userId,
       refId: refId,
       pointsDate,
       points,
