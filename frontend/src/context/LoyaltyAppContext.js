@@ -11,11 +11,11 @@ export const LoyaltyAppProvider = ({ children }) => {
   const [custDetails, setCustDetails] = useState({});
   const [customerPointsData, setCustomerPointsData] = useState([{}]);
   const [isLoading, setIsLoading] = useState(false);
-  const [errMsg, setErrMsg] = useState({ text: "", status: "" });
+  const [errMsg] = useState({ text: "", status: "" });
   const [custDetailsRef, setCustDetailsRef] = useState([{}])
   const navigate = useNavigate();
 
-  const { user } = useSelector((state) => {
+  useSelector((state) => {
     return state.auth;
   });
 
@@ -33,11 +33,7 @@ export const LoyaltyAppProvider = ({ children }) => {
       });
 
       const data = await response.data;
-      // return data
-      console.log(data)
       setCustomerPointsData(data);
-      console.log(customerPointsData)
-      // console.log("hello6")
       setIsLoading(false);
 
       // setErrMsg("");
@@ -76,7 +72,7 @@ export const LoyaltyAppProvider = ({ children }) => {
       const response = await axios.get(API_URL + `/customer-details-ref/${id}`);
       const data = await response.data;
       setIsLoading(false)
-      await setCustDetailsRef(data)
+      setCustDetailsRef(data)
       // return custDetailsRef
       
       

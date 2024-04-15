@@ -1,43 +1,127 @@
-import { useContext } from 'react';
-import {Chart} from 'react-google-charts'
-import PointsContext from '../../context/PointsContext';
+import { Chart } from "react-google-charts";
+import PointsContext from "../../context/PointsContext";
+import { useContext, useEffect, useState } from "react";
+import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 
 
 function DataPage() {
-  const mydata = [
-    { name: "Task", hours: "Hours per Day" },
-    { name: "Work", hours: 5 },
-    { name: "Eat", hours: 2 },
-    { name: "Watch TV", hours: 3 },
-    { name: "Commute", hours: 2 },
-    { name: "Sleep", hours: 7 },
-  ];
-
-  const entries = mydata.map(({ name, hours }) => [name, hours]);
-  console.log(entries);
+  const { totalPtsPerCust, getTotalPtsPerCust } = useContext(PointsContext);
+  const { fetchData, customerPointsData } = useContext(LoyaltyAppContext);
+  const [showTopCust10, setShowTopCust10] = useState();
+  const [showTopCust20, setShowTopCust20] = useState();
 
   const options = {
-    title: "My Daily Activities",
+    title: "Top 10 Customers",
     is3D: true,
   };
 
+  const options2 = {
+    title: "Top 20 Customers",
+  };
+
+  useEffect(() => {
+    getTotalPtsPerCust();
+    fetchData();
+  }, []);
+
   // Todo Task getTotal Points per Customer
-  const { getTotalPtsPerCust } =  useContext(PointsContext);
-  const handleClick = () => {
-    getTotalPtsPerCust()
-  }
+  const handleClick = async () => {
+    const result = await totalPtsPerCust.reduce((a, c) => {
+      a[c.userId] = a[c.userId] || { userId: c.userId, points: 0 };
+      a[c.userId].points += c.points;
+      return a;
+    }, {});
+
+    const custData = await customerPointsData.map((d) => ({
+      userId: d._id,
+      name: d.name,
+      lastName: d.lastName,
+      color: "#" + Math.floor(Math.random() * 16777215).toString(16),
+    }));
+
+    const arr1 = Object.values(result);
+    const arr2 = custData;
+
+    const map = new Map();
+    arr1.forEach((item) => map.set(item.userId, item));
+    arr2.forEach((item) =>
+      map.set(item.userId, { ...map.get(item.userId), ...item })
+    );
+    const mergedArr = await Array.from(map.values());
+
+    const filteredMergedArr2 = mergedArr.filter(({ userId }) => userId);
+    //remove snap from customer
+    const filteredMergedArr = filteredMergedArr2.filter(
+      (u) => u.name !== "snap"
+    );
+
+    const topN = (filteredMergedArr, n) => {
+      if (n > filteredMergedArr.length) {
+        return false;
+      }
+      return filteredMergedArr
+        .slice()
+        .sort((a, b) => {
+          return b.points - a.points;
+        })
+        .slice(0, n);
+    };
+    const topTen = await topN(filteredMergedArr, 10);
+    const topTwenty = await topN(filteredMergedArr, 20);
+
+    const topTwentyWithColor = topTwenty.map(({ name, points, color }) => ({
+      name,
+      points,
+      color,
+    }));
+
+    const withHeader10 = [{ name: "Customers", points: "Points" }, ...topTen];
+    const withHeader20 = [
+      { name: "Customers", points: "Points", color: { role: "style" } },
+      ...topTwentyWithColor,
+    ];
+
+    const myTopCust10 = withHeader10.map(({ name, lastName, points }) => [
+      name + " " + lastName + " - " + points + " points",
+      points,
+    ]);
+
+    const myTopCust20 = withHeader20.map(
+      ({ name, lastName, points, color }) => [
+        name + " " + lastName + " - " + points + " points",
+        points,
+        color,
+      ]
+    );
+
+    setShowTopCust10(myTopCust10);
+    setShowTopCust20(myTopCust20);
+  };
 
   return (
     <>
       <h1>Customer Data Chart</h1>
-      <Chart
-        chartType="PieChart"
-        data={entries}
-        options={options}
-        width={"100%"}
-        height={"400px"}
-      />
-      <button onClick={handleClick} >Test</button>
+      {showTopCust10 && (
+        <Chart
+          chartType="PieChart"
+          data={showTopCust10}
+          options={options}
+          width={"100%"}
+          height={"400px"}
+        />
+      )}
+
+      {showTopCust20 && (
+        <Chart
+          chartType="ColumnChart"
+          data={showTopCust20}
+          options={options2}
+          width={"100%"}
+          height={"400px"}
+        />
+      )}
+
+      <button onClick={handleClick}>Show Charts</button>
     </>
   );
 }

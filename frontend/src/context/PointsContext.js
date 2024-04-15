@@ -15,8 +15,7 @@ export const PointsProvider = ({ children }) => {
   const [totalPoints, setTotalPoints] = useState();
   const [pointsData, setPointsData] = useState({});
   const [overallCustPts, setOverallCustPts] = useState();
-  // const [latestPts, setLatestPts] = useState([{}])
-
+  const [totalPtsPerCust, setTotalPtsPerCust] = useState([{}])
   const [refList, setRefList] = useState([]);
   const navigate = useNavigate();
   const API_URL = "/api/points/";
@@ -288,7 +287,8 @@ export const PointsProvider = ({ children }) => {
 
       const totalPtsPerCust = await response.data;
 
-      console.log(totalPtsPerCust);
+      setTotalPtsPerCust(totalPtsPerCust)
+
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -321,7 +321,7 @@ export const PointsProvider = ({ children }) => {
         totalPoints,
         pointsData,
         overallCustPts,
-        // latestPts,
+        totalPtsPerCust,
       }}
     >
       {children}
