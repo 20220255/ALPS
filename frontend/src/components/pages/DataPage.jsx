@@ -69,8 +69,9 @@ function DataPage() {
     const topTen = await topN(filteredMergedArr, 10);
     const topTwenty = await topN(filteredMergedArr, 20);
 
-    const topTwentyWithColor = topTwenty.map(({ name, points, color }) => ({
+    const topTwentyWithColor = topTwenty.map(({ name, lastName, points, color }) => ({
       name,
+      lastName,
       points,
       color,
     }));
@@ -88,7 +89,7 @@ function DataPage() {
 
     const myTopCust20 = withHeader20.map(
       ({ name, lastName, points, color }) => [
-        name + " " + lastName + " - " + points + " points",
+        name + " " + lastName,
         points,
         color,
       ]
