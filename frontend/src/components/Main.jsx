@@ -150,7 +150,7 @@ function Main({ maxPoints = 6 }) {
           : uncompletedText}
         <PointsCircles maxPoints={maxPoints} />
         <div>
-          <Link to={`/points/${latestRefIdObj._id}/${latestRefIdObj.refId}`}>
+          <Link to={`/points/${latestRefIdObj._id}/${latestRefIdObj.refId}/${userLoggedInData._id}`}>
             <span style={{ color: "royalblue" }}> {latestRefIdObj.refId} </span>
           </Link>{" "}
           is your Ref ID. Click or tap the Ref ID to show details of your
