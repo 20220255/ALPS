@@ -70,9 +70,6 @@ function Login() {
       </section>
 
       <Card>
-        {/* <div style={{ textAlign: "left", color: "royalblue" }}>
-        REF ID: {formValues.refId}
-      </div> */}
         <form onSubmit={onSubmit}>
           <h2>Enter Credentials</h2>
           <div className="padding-b-12">

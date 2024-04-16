@@ -11,11 +11,11 @@ export const LoyaltyAppProvider = ({ children }) => {
   const [custDetails, setCustDetails] = useState({});
   const [customerPointsData, setCustomerPointsData] = useState([{}]);
   const [isLoading, setIsLoading] = useState(false);
-  const [errMsg] = useState({ text: "", status: "" });
+  const [errMsg, setErrMsg] = useState({ text: "", status: "" });
   const [custDetailsRef, setCustDetailsRef] = useState([{}])
   const navigate = useNavigate();
 
-  useSelector((state) => {
+  const { user } = useSelector((state) => {
     return state.auth;
   });
 
@@ -28,17 +28,17 @@ export const LoyaltyAppProvider = ({ children }) => {
     try {
       setIsLoading(true);
 
-      const response = await axios.get(API_URL + "/customers", {
+      const response = await axios.get(API_URL + "customers/", {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
-
       const data = await response.data;
       setCustomerPointsData(data);
       setIsLoading(false);
 
-      // setErrMsg("");
+      setErrMsg("");
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.log(error.response.data.message)
+      toast.error(error);
 
       setIsLoading(false);
 
@@ -72,7 +72,7 @@ export const LoyaltyAppProvider = ({ children }) => {
       const response = await axios.get(API_URL + `/customer-details-ref/${id}`);
       const data = await response.data;
       setIsLoading(false)
-      setCustDetailsRef(data)
+      await setCustDetailsRef(data)
       // return custDetailsRef
       
       

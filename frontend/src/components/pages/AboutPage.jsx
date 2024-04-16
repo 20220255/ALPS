@@ -17,10 +17,8 @@ function AboutPage() {
           width="250"
           height="165"
           style={{ border: "none", overflow: "hidden" }}
-          frameborder="0"
-          allowfullscreen="false"
+          allowFullScreen
           allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-          allowFullScreen="true"
         />
 
         <p>

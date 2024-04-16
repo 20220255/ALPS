@@ -3,29 +3,11 @@ import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout, reset } from "../features/auth/authSlice";
-import { useContext, useEffect } from "react";
-import LoyaltyAppContext from "../context/LoyaltyAppContext";
 
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const { user } = useSelector((state) => state.auth);
   const userToken = JSON.parse(localStorage.getItem("user"));
-  const { fetchData } = useContext(LoyaltyAppContext);
-
-  // console.log(userToken)
-
-  // const handleClick = () => {
-  //   // dispatch(getAllCustomers())
-  //   fetchData();
-  // };
-
-  useEffect(() => {
-    fetchData();
-    // setCustomerData(customerPointsData);
-    // console.log(customerPointsData)
-    // console.log(customerData)
-  }, []);
 
   const onLogout = () => {
     dispatch(logout());
@@ -44,7 +26,6 @@ function Header() {
           flexWrap: "nowrap",
           marginBottom: "10px",
           marginRight: "10px",
-          // paddingRight: ""
         }}
       >
       <div>{false}</div>
