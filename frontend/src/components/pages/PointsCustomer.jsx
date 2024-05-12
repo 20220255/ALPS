@@ -44,7 +44,7 @@ function PointsCustomer() {
       setTotalPoints(totalPoints);
     }
 
-    // some method to check if 0 points has been added to the ref id
+    // 'some' method to check if 0 points has been added to the ref id
     // this will determine if Claim button should appear.
     setAddedZero(pointsArray.some((item) => item.points === 0));
   };
@@ -53,13 +53,8 @@ function PointsCustomer() {
   const handleClaim = async (washClaimed) => {
     const claimed = { refId, washClaimed };
     await updateClaim(claimed);
-    await getSelectedReferenceDetails(!washClaimed);
+    getSelectedReferenceDetails(!washClaimed);
   };
-
-  // check if free wash has been claimed
-  // const freeWashClaimed = async () => {
-  //   await setWashClaimed(selectedReferenceDetails);
-  // };
 
   // add another reference after free wash
   const handleAddRef = async () => {
@@ -194,9 +189,7 @@ function PointsCustomer() {
         <div>Total Points: {totalPoints}</div>
       </div>
       <div style={{ display: "flex", marginTop: "10px", fontSize: "18px" }}>
-        {/* Free wash claimed: {isFreeWashClaimed() ? "Yes" : "No"} */}
         Free wash claimed: {selectedReferenceDetails ? "Yes" : "No"}
-        {/* Free wash claimed: {claim ? "Yes" : "No"} */}
       </div>
       {userToken.isAdmin && (
         <div
