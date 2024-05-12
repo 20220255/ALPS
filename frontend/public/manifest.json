@@ -8,9 +8,10 @@
       "type": "image/x-icon"
     },
     {
-      "src": "snap.png",
+      "src": "snap2.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "maskable"
     },
     {
       "src": "logo512.png",
