@@ -138,7 +138,6 @@ function Main({ maxPoints = 6 }) {
   return isLoading ? (
     <Spinner />
   ) : (
-    <div>
       <Card>
         <canvas className="canvas" {...{ ...canvasRef }} />
         {initialRender
@@ -169,7 +168,6 @@ function Main({ maxPoints = 6 }) {
           )}
         </div>
       </Card>
-    </div>
   );
 }
 
