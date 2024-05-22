@@ -24,6 +24,7 @@ import EditPointsPage from "./components/pages/EditPointsPage";
 import GetReferenceId from "./components/pages/GetReferenceId";
 import DataPage from "./components/pages/DataPage";
 import WeatherPage from "./components/pages/WeatherPage";
+import TriviaApp from "./components/TriviaApp/TriviaApp";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/weather" element={<WeatherPage />} />
+                  <Route path="/trivia-app" element={<TriviaApp />} />
 
                   <Route path="/main" element={<ProtectedRoute />}>
                     <Route exact path="/main" element={<Main />} />

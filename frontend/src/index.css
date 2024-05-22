@@ -232,6 +232,17 @@ input:focus {
   margin-left: -650px;
 }
 
+.btn-md-navy-2 {
+  background-color: navy;
+  border: 0;
+  border-radius: 5px;
+  width: 10rem;
+  height: 40px;
+  cursor: pointer;
+  color: white;
+  font-size: medium;
+}
+
 .btn-md-navy-wide {
   background-color: navy;
   border: 0;

@@ -6,6 +6,9 @@ function AboutIconLink() {
   return (
     <div className="about-link">
       <div style={{marginRight: '1rem'}}>
+        <Link to="/trivia-app">Trivia</Link>
+      </div>
+      <div style={{marginRight: '1rem'}}>
         <Link to="/weather">Weather</Link>
       </div>
       <div>

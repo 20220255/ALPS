@@ -1,0 +1,8 @@
+.correct-ans {
+  background-color: aquamarine;
+}
+
+.incorrect-ans {
+  background-color: red;
+  color: white;
+}
