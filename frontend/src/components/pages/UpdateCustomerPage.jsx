@@ -9,7 +9,6 @@ function UpdateCustomerPage() {
   const { customerPointsData, updateData } = useContext(LoyaltyAppContext);
   const { getOverallPts, overallCustPts } = useContext(PointsContext);
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
 
   const [formValues, setFormValues] = useState({
     _id: "",
@@ -20,8 +19,6 @@ function UpdateCustomerPage() {
     refId: "",
     createdAt: "",
   });
-
-  const [overallPts, setOverallPts] = useState(0) 
 
   const { id } = useParams();
 
@@ -36,13 +33,9 @@ function UpdateCustomerPage() {
   useEffect(() => {
     const pointsData = customerPointsData.find((item) => item._id === id);
     setFormValues(pointsData);
-    getOverallPts(id)
-    // setOverallPts(myOverallPts)
+    getOverallPts(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // }, [customerPointsData, getOverallPts, id]);
-
-
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -101,32 +94,13 @@ function UpdateCustomerPage() {
         <div className="padding-b-12">
           <div className="input-group">
             <div>
-              <label htmlFor="points">Total Points Overall: {overallCustPts} </label>
+              <label htmlFor="points">
+                Total Points Overall: {overallCustPts}{" "}
+              </label>
             </div>
           </div>
         </div>
-        {/* <div className="padding-b-12">
-          <div className="input-group">
-            <div>
-              <label htmlFor="lastDateVisited">Date Last Visited: </label>
-              {formValues.lastDateVisited === "N.A." ? (
-                <input
-                  type="text"
-                  onChange={handleChange}
-                  value={formValues.lastDateVisited}
-                  id="lastDateVisited"
-                />
-              ) : (
-                <input
-                  type="date"
-                  onChange={handleChange}
-                  value={formValues.lastDateVisited}
-                  id="lastDateVisited"
-                />
-              )}
-            </div>
-          </div>
-        </div> */}
+
         <div className="padding-b-12">
           <div className="input-group">
             <div>

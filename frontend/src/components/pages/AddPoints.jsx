@@ -3,11 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import Card from "../shared/Card";
 import PointsContext from "../../context/PointsContext";
 import Button from "../shared/Button";
+import { toast } from "react-toastify";
 
 function AddPoints() {
-  const userToken = JSON.parse(localStorage.getItem("user"));
 
-  const { addPointsByRefId } = useContext(PointsContext);
+  const { addPointsByRefId, getPointsByRefId } = useContext(PointsContext);
   const [formValues, setFormValues] = useState({
     refId: "",
     pointsDate: "",
@@ -24,15 +24,7 @@ function AddPoints() {
   const [isChecked, setIsChecked] = useState(false);
 
   const navigate = useNavigate();
-
-  const latestRefIdObj = userToken.refId.at(-1);
-
-
-  useEffect(() => {
-    // get the _id from reference table using refId. This will be used for adding points 
-  },[])
-
-
+  
   const handleChange = (e) => {
     if (e.target.id === "points") {
       setFormValues({ ...formValues, [e.target.id]: parseInt(e.target.value) });
@@ -44,7 +36,20 @@ function AddPoints() {
     }
   };
 
-  const handleSubmit = (e) => {
+  // get the pts from ref id
+  const getLatestPtsFromRefId = async () => {
+    console.log("ref id: " + refID)
+    const pts = await getPointsByRefId(refId);
+    const pointsArray = await pts[0].pointsIds;
+    if (pointsArray.length > 0) {
+      const totalPoints = await pointsArray
+        .map((obj) => obj.points)
+        .reduce((accumulator, current) => accumulator + current, 0);
+      return totalPoints + formValues.points;
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const pointsData = {
       userId,
@@ -53,7 +58,14 @@ function AddPoints() {
       points,
       comments,
     };
-    addPointsByRefId(pointsData);
+    // Check if total pts per ref id is more than 6 pts
+    const totalPts = await getLatestPtsFromRefId();
+    if (totalPts > 6) {
+      navigate(-1)
+      toast.error("Total points per Ref ID should not exceed 6 pts.");
+    } else {
+      addPointsByRefId(pointsData);
+    }
   };
 
   const handleIncrement = (e) => {
@@ -91,21 +103,6 @@ function AddPoints() {
               </div>
             </div>
           </div>
-          {/* <div className="padding-b-12">
-            <div className="input-group">
-              <div>
-                <label htmlFor="claimed">Wash Claimed: </label>
-                <input
-                  type="checkbox"
-                  onChange={handleChange}
-                  checked={isChecked}
-                  //   value={formValues.claimed}
-                  id="claimed"
-                  autoComplete="true"
-                />
-              </div>
-            </div>
-          </div> */}
           <div className="padding-b-12">
             <div className="input-group">
               <div>

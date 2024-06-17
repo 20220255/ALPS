@@ -4,8 +4,6 @@ import LoyaltyAppContext from "../../context/LoyaltyAppContext";
 import CustomerList from "../CustomerList";
 
 function CustomerPage() {
-  // const [search, setSearch] = useState("");
-
   const { fetchData, customerPointsData, isLoading } =
     useContext(LoyaltyAppContext);
 
@@ -13,6 +11,7 @@ function CustomerPage() {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleSortAscend(sort = "") {
@@ -26,11 +25,7 @@ function CustomerPage() {
   };
 
   if (!isLoading && !customerPointsData) {
-    return (
-      <>
-        <Spinner />
-      </>
-    );
+    return <Spinner />;
   }
 
   return isLoading ? (

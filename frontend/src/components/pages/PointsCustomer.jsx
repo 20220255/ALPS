@@ -24,7 +24,7 @@ function PointsCustomer() {
 
   useEffect(() => {
     getLatestPtsFromRefId();
-    // freeWashClaimed();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // get the pts from ref id

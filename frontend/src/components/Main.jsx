@@ -86,7 +86,7 @@ function Main({ maxPoints = 6 }) {
       <h3>
         Hi {userLoggedInData.name}! This free wash has been claimed. To win
         another free wash, just tap or click the
-        <span style={{ color: "red" }}> Free Wash</span> button to retrieve your
+        <span style={{ color: "red" }}> New Ref ID</span> button to retrieve your
         new Ref ID.
       </h3>
     </>
@@ -159,7 +159,7 @@ function Main({ maxPoints = 6 }) {
         <div className="refresh">
           {claimed ? (
             <button className="btn-md-navy-wide" onClick={handleAddRef}>
-              Free Wash
+              New Ref ID
             </button>
           ) : (
             <button className="btn-md-navy-wide" onClick={handleClick}>

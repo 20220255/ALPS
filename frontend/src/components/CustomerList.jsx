@@ -6,7 +6,6 @@ const CustomerList = ({ handleSortAscend, customerData }) => {
   const [search, setSearch] = useState("");
 
   const handleChange = (e) => {
-    console.log(e.target.value);
     setSearch(e.target.value);
   };
 
@@ -55,17 +54,18 @@ const CustomerList = ({ handleSortAscend, customerData }) => {
                     item.email?.toString().includes(search?.toString());
             })
             .map((item, index) => {
+              const { _id, name, lastName } = item;
               return (
                 <tr key={index} className="customer-row">
                   <td>
                     <div className="edit-link">
-                      <Link to={`/update-customer/${item._id}`}>
+                      <Link to={`/update-customer/${_id}`}>
                         <FaEdit size={18} />
                       </Link>
                     </div>
                   </td>
-                  <td>{item.name}</td>
-                  <td>{item.lastName}</td>
+                  <td>{name}</td>
+                  <td>{lastName}</td>
                 </tr>
               );
             })}
