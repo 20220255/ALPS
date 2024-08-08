@@ -281,12 +281,13 @@ export const PointsProvider = ({ children }) => {
 
   const getTotalPtsPerCust = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(API_URL + "get-total-points", {
         headers: { Authorization: `Bearer ${userLocal.token}` },
       });
 
       const totalPtsPerCust = await response.data;
-
+      setLoading(false);
       setTotalPtsPerCust(totalPtsPerCust)
 
     } catch (error) {

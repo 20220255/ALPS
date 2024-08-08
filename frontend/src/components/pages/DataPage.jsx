@@ -2,14 +2,14 @@ import { Chart } from "react-google-charts";
 import PointsContext from "../../context/PointsContext";
 import { useContext, useEffect, useState } from "react";
 import LoyaltyAppContext from "../../context/LoyaltyAppContext";
-
+import Spinner from "../shared/Spinner";
 
 function DataPage() {
   const { totalPtsPerCust, getTotalPtsPerCust } = useContext(PointsContext);
-  const { fetchData, customerPointsData } = useContext(LoyaltyAppContext);
+  const { fetchData, customerPointsData, isLoading, setIsLoading } =
+    useContext(LoyaltyAppContext);
   const [showTopCust10, setShowTopCust10] = useState();
   const [showTopCust20, setShowTopCust20] = useState();
-
   const options = {
     title: "Top 10 Customers",
     is3D: true,
@@ -18,10 +18,13 @@ function DataPage() {
   const options2 = {
     title: "Top 20 Customers",
   };
-
   useEffect(() => {
-    getTotalPtsPerCust();
-    fetchData();
+    setIsLoading(true);
+    const getDataChart = async () => {
+      await getTotalPtsPerCust();
+      await fetchData();
+    };
+    getDataChart();
   }, []);
 
   // Todo Task getTotal Points per Customer
@@ -38,7 +41,6 @@ function DataPage() {
       lastName: d.lastName,
       color: "#" + Math.floor(Math.random() * 16777215).toString(16),
     }));
-
     const arr1 = Object.values(result);
     const arr2 = custData;
 
@@ -47,9 +49,10 @@ function DataPage() {
     arr2.forEach((item) =>
       map.set(item.userId, { ...map.get(item.userId), ...item })
     );
-    const mergedArr = await Array.from(map.values());
+    const mergedArr = Array.from(map.values());
 
     const filteredMergedArr2 = mergedArr.filter(({ userId }) => userId);
+
     //remove snap from customer
     const filteredMergedArr = filteredMergedArr2.filter(
       (u) => u.name !== "snap"
@@ -69,12 +72,14 @@ function DataPage() {
     const topTen = await topN(filteredMergedArr, 10);
     const topTwenty = await topN(filteredMergedArr, 20);
 
-    const topTwentyWithColor = topTwenty.map(({ name, lastName, points, color }) => ({
-      name,
-      lastName,
-      points,
-      color,
-    }));
+    const topTwentyWithColor = await topTwenty.map(
+      ({ name, lastName, points, color }) => ({
+        name,
+        lastName,
+        points,
+        color,
+      })
+    );
 
     const withHeader10 = [{ name: "Customers", points: "Points" }, ...topTen];
     const withHeader20 = [
@@ -99,32 +104,36 @@ function DataPage() {
     setShowTopCust20(myTopCust20);
   };
 
-  return (
-    <>
-      <h1>Customer Data Chart</h1>
-      {showTopCust10 && (
-        <Chart
-          chartType="PieChart"
-          data={showTopCust10}
-          options={options}
-          width={"100%"}
-          height={"400px"}
-        />
-      )}
+  if (customerPointsData.length > 1 && !isLoading) {
+    return (
+      <>
+        <h1>Customer Data Chart</h1>
+        {showTopCust10 && (
+          <Chart
+            chartType="PieChart"
+            data={showTopCust10}
+            options={options}
+            width={"100%"}
+            height={"400px"}
+          />
+        )}
 
-      {showTopCust20 && (
-        <Chart
-          chartType="ColumnChart"
-          data={showTopCust20}
-          options={options2}
-          width={"100%"}
-          height={"400px"}
-        />
-      )}
+        {showTopCust20 && (
+          <Chart
+            chartType="ColumnChart"
+            data={showTopCust20}
+            options={options2}
+            width={"100%"}
+            height={"400px"}
+          />
+        )}
 
-      <button onClick={handleClick}>Show Charts</button>
-    </>
-  );
+        <button onClick={handleClick}>Show Charts</button>
+      </>
+    );
+  } else {
+    return <Spinner />;
+  }
 }
 
 export default DataPage;

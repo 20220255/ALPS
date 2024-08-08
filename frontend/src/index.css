@@ -251,6 +251,7 @@ input:focus {
   color: white;
   font-size: medium;
   height: 40px;
+  cursor: pointer;
 }
 
 .refresh {
@@ -395,7 +396,7 @@ div.circle {
   border-radius: 50px;
   margin: 15px;
   background-color: lightgray;
-  cursor: pointer;
+  cursor: not-allowed;
   text-align: center;
 }
 
