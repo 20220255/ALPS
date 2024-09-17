@@ -38,7 +38,6 @@ function AddPoints() {
 
   // get the pts from ref id
   const getLatestPtsFromRefId = async () => {
-    console.log("ref id: " + refID)
     const pts = await getPointsByRefId(refId);
     const pointsArray = await pts[0].pointsIds;
     if (pointsArray.length > 0) {
