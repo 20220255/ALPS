@@ -7,7 +7,7 @@ function Home() {
       <section className="heading">
         <h1>All Year Promo!!!</h1>
         <p>
-          Wash or dry your laundry for 6 times and get a free wash on your next
+          Wash or dry your laundry for 8 times and get a free wash on your next
           laundry.
         </p>
       </section>
