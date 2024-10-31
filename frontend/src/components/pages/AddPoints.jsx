@@ -59,9 +59,9 @@ function AddPoints() {
     };
     // Check if total pts per ref id is more than 6 pts
     const totalPts = await getLatestPtsFromRefId();
-    if (totalPts > 6) {
+    if (totalPts > 8) {
       navigate(-1)
-      toast.error("Total points per Ref ID should not exceed 6 pts.");
+      toast.error("Total points per Ref ID should not exceed 8 pts.");
     } else {
       addPointsByRefId(pointsData);
     }

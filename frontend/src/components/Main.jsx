@@ -9,7 +9,7 @@ import Spinner from "./shared/Spinner";
 import { Link } from "react-router-dom";
 import PointsContext from "../context/PointsContext";
 
-function Main({ maxPoints = 6 }) {
+function Main({ maxPoints = 8 }) {
   useSelector((state) => {
     return state.auth;
   });
@@ -93,8 +93,8 @@ function Main({ maxPoints = 6 }) {
   );
 
   const handlePointsClaimed = async (points, claimed) => {
-    if (points >= 6) {
-      points = 6;
+    if (points >= 8) {
+      points = 8;
     }
 
     function sleep(ms) {
@@ -114,7 +114,7 @@ function Main({ maxPoints = 6 }) {
         "lightgray";
     }
 
-    if (points >= 6 && !claimed) {
+    if (points >= 8 && !claimed) {
       confettiRef.current = new JSConfetti({ canvas: canvasRef.current });
       confettiRef.current.addConfetti({
         confettiRadius: 5,

@@ -102,7 +102,7 @@ function PointsCustomer() {
         <div style={{ float: "left" }} className="ptsRefId">
           Reference ID: {refID}
         </div>
-        {selectedReferenceDetails && totalPoints >= 6 && (
+        {selectedReferenceDetails && totalPoints >= 8 && (
           <div className="ptsRefId" style={{ float: "right" }}>
             <button onClick={handleAddRef} className="btn-md">
               Free Wash Again?
@@ -121,7 +121,7 @@ function PointsCustomer() {
               </Link>
             </div>
             {/* Check if points has at least 6 pts and 0 has been added for the free wash */}
-            {totalPoints >= 6 && addedZero && (
+            {totalPoints >= 8 && addedZero && (
               <div className="ptsRefId" style={{ float: "right" }}>
                 <button
                   onClick={() => handleClaim(selectedReferenceDetails)}
